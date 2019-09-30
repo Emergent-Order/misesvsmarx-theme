@@ -14,11 +14,30 @@ const store = new Vuex.Store({
   getters: {
     getPost: (state) => (id) => {
       return state.posts.find(post => post.id === id)
+    },
+    getPostByIndex: (state) => (index) => {
+      return state.posts.find(post => post.index === index)
     }
   },
   mutations: {
     setPosts(state, arr) {
       state.posts = arr
+    },
+    setCorrectIndex(state, { id, index, top, bottom }) {
+      const post = state.posts.find(post => post.id == id)
+      console.log(top, bottom)
+      post.index = index
+      post.top = top
+      post.bottom = bottom
+    },
+    setYPositions(state, { id, top, bottom }) {
+      console.log(id, top, bottom)
+      const post = state.posts.find(post => post.id == id)
+      if (post) {
+        console.log("index", post.index)
+        post.top = top
+        post.bottom = bottom
+      }
     }
   },
   actions: {
@@ -30,7 +49,7 @@ const store = new Vuex.Store({
       state.posts = posts
 
       // Set annotations
-      const annotations = await posts.map(post => {
+      const annotations = await posts.map((post, index) => {
         const hasVideo = post.acf ? post.acf.type === "Video" : null
         const videoEmbed = hasVideo ? post.acf.video_url : null
         const externalUrl = !hasVideo ? post.acf.other_url : null
@@ -38,6 +57,7 @@ const store = new Vuex.Store({
         return {
           open: false,
           ...post,
+          index: null,
           hasVideo,
           videoEmbed,
           externalUrl,
@@ -45,6 +65,8 @@ const store = new Vuex.Store({
       })
 
       this.commit('setPosts', annotations)
+
+      return annotations
     },
     async openAnnotation({ state, getters }, id) {
       const post = getters.getPost(id)

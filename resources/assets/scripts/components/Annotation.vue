@@ -1,9 +1,9 @@
 <template>
-  <div class="annotation" @click="openAnnotation()">
+  <div class="annotation" @click="openAnnotation()" :class="{ 'is-open': open }">
     <div ref="text" class="annotation-text">
       <slot></slot>
     </div>
-    <aside v-if="post" class="annotation-aside" :style="`top: ${top}px`">
+    <aside ref="box" v-if="post" class="annotation-aside" :style="`top: ${post.top}px`">
       <template v-if="hasVideo">
         <div v-show="open"
           class="annotation-video responsive-embed"
@@ -24,15 +24,20 @@ export default {
     dataPostId: {
       type: String,
       default: "0"
-    },
+    }
   },
-  data() {
-    return {
-      // open: false,
-      top: 0
+  watch: {
+    post() {
+      // this.getYPos()
     }
   },
   computed: {
+    index() {
+      return this.post.index
+    },
+    prevPost() {
+      return this.$store.getters.getPostByIndex(this.index - 1)
+    },
     post() {
       return this.$store.getters.getPost(parseInt(this.dataPostId)) || {}
     },
@@ -44,23 +49,40 @@ export default {
     },
     open() {
       return this.post.open
+    },
+    top() {
+      return this.post.top
+    },
+    bottom() {
+      return this.post.bottom
     }
   },
   methods: {
     getRendered(obj) {
       return obj ? he.decode(obj.rendered) : ''
     },
-    getYPos() {
-      const text = this.$refs.text
-      const box = text.offsetTop
-      this.top = box
-    },
+    // getYPos() {
+    //   let top, bottom
+    //
+    //   const prevPostBottom = this.prevPost ? this.prevPost.bottom : 0
+    //
+    //   if (prevPostBottom > this.$refs.text.offsetTop + 40) {
+    //     top = prevPostBottom + 100
+    //     bottom = top + this.$refs.box.offsetHeight
+    //   } else {
+    //     top = this.$refs.text.offsetTop
+    //     bottom = top + this.$refs.box.offsetHeight
+    //   }
+    //
+    //   const id = this.post.id
+    //   this.$store.commit('setYPositions', { id, top, bottom })
+    // },
     openAnnotation() {
       this.$store.dispatch('openAnnotation', this.post.id)
     },
   },
   mounted() {
-    this.getYPos()
+    // this.getYPos()
   }
 }
 </script>
@@ -75,7 +97,7 @@ export default {
 .annotation-text {
   @apply relative;
   display: inline;
-  margin-right: -0.5rem;
+  margin-right: -0.25rem;
   // padding: 0rem 0.25rem;
   // margin-left: -0.25rem;
   transition: all 0.25s ease;
@@ -97,7 +119,8 @@ export default {
   font-size: 15px;
 }
 
-#lyrics .annotation:hover {
+#lyrics .annotation:hover,
+#lyrics .annotation.is-open {
   .annotation-text {
     background-color: #F0E0AD;
     transition: all 0.25s ease;
