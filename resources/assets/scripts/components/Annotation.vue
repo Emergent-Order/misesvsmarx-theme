@@ -1,9 +1,15 @@
 <template>
-  <div class="annotation">
+  <div class="annotation" @click="openAnnotation()">
     <div ref="text" class="annotation-text">
       <slot></slot>
     </div>
     <aside v-if="post" class="annotation-aside" :style="`top: ${top}px`">
+      <template v-if="hasVideo">
+        <div v-show="open"
+          class="annotation-video responsive-embed"
+          v-html="videoEmbed"
+        ></div>
+      </template>
       <h3>{{ getRendered(post.title) }}</h3>
       <div class="annotation-excerpt" v-html="getRendered(post.excerpt )"></div>
     </aside>
@@ -22,7 +28,7 @@ export default {
   },
   data() {
     return {
-      open: false,
+      // open: false,
       top: 0
     }
   },
@@ -30,6 +36,15 @@ export default {
     post() {
       return this.$store.getters.getPost(parseInt(this.dataPostId)) || {}
     },
+    hasVideo() {
+      return this.post.hasVideo
+    },
+    videoEmbed() {
+      return this.post.videoEmbed
+    },
+    open() {
+      return this.post.open
+    }
   },
   methods: {
     getRendered(obj) {
@@ -39,11 +54,13 @@ export default {
       const text = this.$refs.text
       const box = text.offsetTop
       this.top = box
-    }
+    },
+    openAnnotation() {
+      this.$store.dispatch('openAnnotation', this.post.id)
+    },
   },
   mounted() {
     this.getYPos()
-    this.$store.dispatch('addAnnotation', this)
   }
 }
 </script>
