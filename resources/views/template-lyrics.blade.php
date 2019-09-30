@@ -18,7 +18,9 @@
     </div>
   </div>
   <div id="intro" class="container mx-auto">
-    @php the_field('instructions') @endphp
+    <div class="row">
+      @php the_field('instructions') @endphp
+    </div>
   </div>
   @php
     $blocks = parse_blocks($post->post_content);

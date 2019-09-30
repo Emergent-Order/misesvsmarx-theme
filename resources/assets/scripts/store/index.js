@@ -9,7 +9,8 @@ const site = WPAPI.discover(globals.siteUrl)
 
 const store = new Vuex.Store({
   state: {
-    posts: []
+    posts: [],
+    annotations: []
   },
   getters: {
     getPost: (state) => (id) => {
@@ -18,15 +19,19 @@ const store = new Vuex.Store({
   },
   actions: {
     async getAnnotations({ state }) {
-      console.log('running getAnnotations')
       const site = await WPAPI.discover(globals.siteUrl)
-      const posts = await site.annotations().get()
-      console.log('posts', posts)
+      const posts = await site.annotations().perPage(50).get()
       state.posts = posts
     },
     async getAnnotation({ state }, id) {
       const site = await WPAPI.discover(globals.siteUrl)
       return site.annotations().id(id)
+    },
+    setAnnotations({ state }, arr) {
+      state.annotations = arr
+    },
+    addAnnotation({ state }, obj) {
+      state.annotations.push(obj)
     }
   }
 })

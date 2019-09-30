@@ -46,6 +46,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
+    "breakpoint-sass": "^2.7.1",
     "cheerio": "^1.0.0-rc.3",
     "he": "^1.2.0",
     "lodash": "^4.17.15",

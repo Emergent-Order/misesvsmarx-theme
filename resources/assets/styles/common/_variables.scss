@@ -1,0 +1,8 @@
+$large: "1266px";
+
+
+@mixin grid($above) {
+  @include breakpoint($above) {
+    @content;
+  }
+}

@@ -1,28 +1,28 @@
-.mvm-has-annotation.annotation {
-  background: transparent !important;
-  display: inline-block;
-  @apply relative;
-}
-
-.annotation-text {
-  @apply cursor-pointer relative;
-  display: inline-block;
-  padding: 0rem 0.2rem;
-  transition: all 0.25s ease;
-  background-color: #D8D8D8;
-
-  &:hover {
-    background-color: #F0E0AD;
-    transition: all 0.25s ease;
-  }
-}
-
-.annotation-aside {
-  @apply absolute text-gray-600 ml-auto w-1/3;
-  top: 4px;
-  right: 0;
-  h3 {
-    @apply font-display;
-    color: #D8D8D8;
-  }
-}
+// .mvm-has-annotation.annotation {
+//   background: transparent !important;
+//   display: inline-block;
+//   @apply relative;
+// }
+//
+// .annotation-text {
+//   @apply cursor-pointer relative;
+//   display: inline-block;
+//   padding: 0rem 0.2rem;
+//   transition: all 0.25s ease;
+//   background-color: #D8D8D8;
+//
+//   &:hover {
+//     background-color: #F0E0AD;
+//     transition: all 0.25s ease;
+//   }
+// }
+//
+// .annotation-aside {
+//   @apply absolute text-gray-600 ml-auto w-1/3;
+//   top: 4px;
+//   right: 0;
+//   h3 {
+//     @apply font-display;
+//     color: #D8D8D8;
+//   }
+// }

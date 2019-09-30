@@ -23,7 +23,8 @@
  * Prefix your imports with `~` to grab from node_modules/
  * @see https://github.com/webpack-contrib/sass-loader#imports
  */
-// @import "~some-node-module";
+
+@import "~breakpoint-sass";
 
 /**
  * This injects any component classes registered by Tailwind plugins.
