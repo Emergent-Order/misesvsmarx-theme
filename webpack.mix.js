@@ -25,9 +25,9 @@ mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
   })
 
 mix.js(`${assets}/scripts/main.js`, `${dist}/scripts`)
-   .autoload({
-     jquery: ['$', 'window.jQuery']
-   })
+   // .autoload({
+   //   jquery: ['$', 'window.jQuery']
+   // })
 
 mix.browserSync({
   host: 'localhost',

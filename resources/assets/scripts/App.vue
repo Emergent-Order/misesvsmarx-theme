@@ -9,7 +9,7 @@ import Lyrics from './components/Lyrics.vue'
 export default {
   name: 'App',
   mounted() {
-    
+
   }
 }
 </script>

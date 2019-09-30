@@ -24,19 +24,19 @@ export default {
   },
   mounted() {
     this.$store.dispatch('getAnnotations')
-    this.$nextTick(() => {
-      const $ = cheerio.load(this.$refs.lyrics.innerHTML)
-      const annotations = $('.mvm-has-annotation').map((index, node) => {
-        return {
-          node,
-          postId: node.attribs["data-post-id"],
-          status: false
-        }
-      }).get()
-
-      console.log(annotations)
-      this.annotations = annotations
-    })
+    // this.$nextTick(() => {
+    //   const $ = cheerio.load(this.$refs.lyrics.innerHTML)
+    //   const annotations = $('.mvm-has-annotation').map((index, node) => {
+    //     return {
+    //       node,
+    //       postId: node.attribs["data-post-id"],
+    //       status: false
+    //     }
+    //   }).get()
+    //
+    //   console.log(annotations)
+    //   this.annotations = annotations
+    // })
   }
 }
 </script>
