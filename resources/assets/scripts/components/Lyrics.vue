@@ -1,27 +1,22 @@
 <template>
-  <div ref="lyrics">
+  <div ref="lyrics" class="container relative">
     <slot></slot>
     <aside>
-      <annotation
+      <!-- <annotation
         v-if="annotations"
         v-for="ann in annotations"
         :key="ann.postId"
         :postId="ann.postId"
       >
         {{ ann.postId }}
-      </annotation>
+      </annotation> -->
     </aside>
   </div>
 </template>
 
 <script>
-import cheerio from 'cheerio'
-import annotation from './Annotation'
 export default {
   name: 'Lyrics',
-  components: {
-    annotation
-  },
   data() {
     return {
       annotations: []
