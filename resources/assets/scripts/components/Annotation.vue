@@ -3,7 +3,7 @@
     <div ref="text" class="annotation-text">
       <slot></slot>
     </div>
-    <aside ref="box" v-if="post" class="annotation-aside" :style="`top: ${post.top}px`">
+    <aside ref="box" v-if="post" class="annotation-aside" :style="style">
       <template v-if="hasVideo">
         <div v-show="open"
           class="annotation-video responsive-embed"
@@ -26,11 +26,6 @@ export default {
       default: "0"
     }
   },
-  watch: {
-    post() {
-      // this.getYPos()
-    }
-  },
   computed: {
     index() {
       return this.post.index
@@ -50,11 +45,14 @@ export default {
     open() {
       return this.post.open
     },
-    top() {
+    y() {
       return this.post.top
     },
     bottom() {
       return this.post.bottom
+    },
+    style() {
+      return `top: ${ this.post.top }px;`
     }
   },
   methods: {

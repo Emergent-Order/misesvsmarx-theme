@@ -20,6 +20,7 @@ export default {
     const app = this
     this.$store.dispatch('getAnnotations').then(() => {
       this.$nextTick(() => {
+        console.log('Getting coordinates')
         let prevPostBottom = 0
 
         for (let i = 0; i < app.$children.length; i++) {
@@ -27,7 +28,7 @@ export default {
           console.log(child.$refs.text.offsetTop, prevPostBottom)
           let top, bottom
 
-          if (prevPostBottom > child.$refs.text.offsetTop + 40) {
+          if (prevPostBottom + 40 > child.$refs.text.offsetTop) {
             console.log("Uhoh, collision")
             top = prevPostBottom + 100
             bottom = top + child.$refs.box.offsetHeight
@@ -38,7 +39,7 @@ export default {
           }
 
           prevPostBottom = bottom
-
+          console.log('Coords: ', top, bottom, prevPostBottom)
           app.$store.commit('setCorrectIndex', {
             id: app.$children[i].dataPostId,
             index: i,

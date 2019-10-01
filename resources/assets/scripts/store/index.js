@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import findIndex from 'lodash/findIndex'
 
 Vue.use(Vuex)
 
@@ -24,8 +25,17 @@ const store = new Vuex.Store({
       state.posts = arr
     },
     setCorrectIndex(state, { id, index, top, bottom }) {
-      const post = state.posts.find(post => post.id == id)
-      console.log(top, bottom)
+      console.log('Setting setCorrectIndex', top, bottom)
+      let post = state.posts.find(post => post.id == id)
+      // let p = findIndex(state.posts, p => { return p.id == id })
+      console.log(id, index, top, bottom, post)
+
+      // post = {
+      //   ...post,
+      //   index: index,
+      //   top: top,
+      //   botto: bottom
+      // }
       post.index = index
       post.top = top
       post.bottom = bottom
