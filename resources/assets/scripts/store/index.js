@@ -24,30 +24,36 @@ const store = new Vuex.Store({
     setPosts(state, arr) {
       state.posts = arr
     },
-    setCorrectIndex(state, { id, index, top, bottom }) {
-      console.log('Setting setCorrectIndex', top, bottom)
+    setCoordinates(state, { id, top, bottom }) {
       let post = state.posts.find(post => post.id == id)
-      // let p = findIndex(state.posts, p => { return p.id == id })
-      console.log(id, index, top, bottom, post)
-
-      // post = {
-      //   ...post,
-      //   index: index,
-      //   top: top,
-      //   botto: bottom
-      // }
+      post = Object.assign(post, {
+        top,
+        bottom
+      })
+    },
+    setCorrectIndex(state, { id, index, top, bottom }) {
+      let post = state.posts.find(post => post.id == id)
       post.index = index
-      post.top = top
-      post.bottom = bottom
     },
     setYPositions(state, { id, top, bottom }) {
-      console.log(id, top, bottom)
       const post = state.posts.find(post => post.id == id)
       if (post) {
         console.log("index", post.index)
         post.top = top
         post.bottom = bottom
       }
+    },
+    setBottomCoordinate(state, { id, val }) {
+      let post = state.posts.find(post => post.id == id)
+      post = Object.assign(post, {
+        bottom: val
+      })
+    },
+    setTopCoordinate(state, { id, val }) {
+      let post = state.posts.find(post => post.id == id)
+      post = Object.assign(post, {
+        top: val
+      })
     }
   },
   actions: {
@@ -80,6 +86,8 @@ const store = new Vuex.Store({
     },
     async openAnnotation({ state, getters }, id) {
       const post = getters.getPost(id)
+
+      // Open selected post, close other posts
       const newPosts = await state.posts.map(post => {
         if (post.id === id) {
           post.open = true
@@ -91,7 +99,41 @@ const store = new Vuex.Store({
       })
 
       state.posts = newPosts
+    },
+    setAllCoordinates({ state, getters, commit }, children) {
+      let prevPostBottom = 0
+
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+        const id = children[i].dataPostId
+        // console.log(child.$refs.text.offsetTop, prevPostBottom)
+        let top, bottom
+
+        if (prevPostBottom + 40 > child.$refs.text.offsetTop) {
+          // console.log("Uhoh, collision")
+          top = prevPostBottom + 20
+          bottom = top + child.$refs.box.offsetHeight
+          // console.log('new coords', top, bottom)
+        } else {
+          top = child.$refs.text.offsetTop - 20
+          bottom = top + child.$refs.box.offsetHeight
+        }
+
+        prevPostBottom = bottom
+        // console.log('Coords: ', top, bottom, prevPostBottom)
+
+        commit('setCorrectIndex', {
+          id,
+          index: i
+        })
+
+        commit('setCoordinates', {
+          id,
+          top,
+          bottom
+        })
     }
+  }
   }
 })
 
