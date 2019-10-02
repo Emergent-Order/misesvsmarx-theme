@@ -8,7 +8,6 @@
       v-if="post"
       class="annotation-aside"
       :style="style"
-      v-resize="handleResize"
     >
       <template v-if="hasVideo">
         <transition name="openBox">
@@ -26,7 +25,7 @@
 
 <script>
 const he = require('he')
-import resize from 'vue-resize-directive'
+// import resize from 'vue-resize-directive'
 export default {
   name: "Annotation",
   props: {
@@ -34,9 +33,6 @@ export default {
       type: String,
       default: "0"
     }
-  },
-  directives: {
-    resize,
   },
   data() {
     return {
@@ -47,39 +43,12 @@ export default {
   watch: {
     post: {
       handler: function(val) {
+        console.log('handling post change', val.offset)
         this.y = val.top
+        this.offsetY = val.offset
       },
       deep: true
-    },
-    // open: {
-    //   handler: function(val) {
-    //     const app = this
-    //     console.log('Just opened or closed!', val)
-    //     if (val) {
-    //       app.$nextTick(() => {
-    //         const bottom = app.y + app.$refs.box.getBoundingClientRect().height
-    //         console.log('bottom', bottom)
-    //         app.$store.commit('setBottomCoordinate', {
-    //           id: this.post.id,
-    //           val: bottom
-    //         })
-    //       })
-    //     }
-    //   }
-    // },
-    // "prevPost.bottom": {
-    //   handler: function(val) {
-    //     console.log('Notice: ', this.prevPost.slug, ' new bottom: ', val)
-    //     console.log('Notice: ', this.post.slug, ' new top: ', val + 20)
-    //     if (val + 40 > this.y) {
-    //       this.y = val + 20
-    //       this.$store.commit('setTopCoordinate', {
-    //         id: this.post.id,
-    //         val: val + 20
-    //       })
-    //     }
-    //   }
-    // }
+    }
   },
   computed: {
     index() {
@@ -104,91 +73,42 @@ export default {
       return this.post.open
     },
     style() {
-      return `top: ${ this.y }px; transform: translateY(${ this.offsetY }px);`
+      return `top: ${ this.y }px; transform: translateY(${ this.post.offset }px);`
     },
   },
   methods: {
-    handleResize(el) {
-      const nextPost = this.$parent.$children[this.index + 1]
-      if (!nextPost) { return false }
-
-      const top     = this.$refs.box.offsetTop
-      const height  = this.$refs.box.offsetHeight
-      const bottom  = top + height
-      const nextPostTop = nextPost.$refs.box.offsetTop
-
-      console.log('Handling resize for', this.slug, {
-        top,
-        height,
-        bottom,
-        nextPostTop
+    setOffset(y, slug) {
+      this.$store.commit('setPostOffset', {
+        id: this.post.id,
+        offset: y,
+        slug: this.slug
       })
-
-      // If the nextPost starts less than 20px after
-      // this one ends, move it down
-      if (nextPostTop < bottom + 20) {
-
-        // Get the offset amount from current position
-        const offset = bottom - nextPostTop + 20
-        nextPost.offsetY = offset
-
-        console.log('Offest for next post', nextPost.slug, 'is', offset)
-        nextPost.handleResizeChain(offset)
-      } else {
-        nextPost.offsetY = 0
-      }
     },
-    handleResizeChain(off) {
+    handleResize() {
       const nextPost = this.$parent.$children[this.index + 1]
       if (!nextPost) { return false }
 
-      const top     = this.$refs.box.offsetTop + off
+      const top     = this.$refs.box.offsetTop + this.post.offset
       const height  = this.$refs.box.offsetHeight
       const bottom  = top + height
-      const nextPostTop = nextPost.$refs.box.offsetTop
+      const nextPostTop = nextPost.$refs.box.offsetTop + nextPost.post.offset
 
-      console.log('Handling resize *chain* for', this.slug, {
-        top,
-        height,
-        bottom,
-        nextPostTop
-      })
-
-      // If the nextPost starts less than 20px after
-      // this one ends, move it down
+      // If the nextPost starts less than 20px after this one ends, move it down
       if (nextPostTop < bottom + 20) {
-
         // Get the offset amount from current position
         const offset = bottom - nextPostTop + 20
-        nextPost.offsetY = offset
-
-        console.log('Offest for next post', nextPost.slug, 'is', offset)
-        nextPost.handleResizeChain(offset)
-      } else {
-        nextPost.offsetY = 0
+        nextPost.setOffset(offset, this.slug)
+        nextPost.handleResize()
       }
     },
     getRendered(obj) {
       return obj ? he.decode(obj.rendered) : ''
     },
-    // getYPos() {
-    //   let top, bottom
-    //
-    //   const prevPostBottom = this.prevPost ? this.prevPost.bottom : 0
-    //
-    //   if (prevPostBottom > this.$refs.text.offsetTop + 40) {
-    //     top = prevPostBottom + 100
-    //     bottom = top + this.$refs.box.offsetHeight
-    //   } else {
-    //     top = this.$refs.text.offsetTop
-    //     bottom = top + this.$refs.box.offsetHeight
-    //   }
-    //
-    //   const id = this.post.id
-    //   this.$store.commit('setYPositions', { id, top, bottom })
-    // },
-    openAnnotation() {
-      this.$store.dispatch('openAnnotation', this.post.id)
+    async openAnnotation() {
+      this.setOffset(0)
+      this.$store.dispatch('openAnnotation', this.post.id).then(() => {
+        this.handleResize()
+      })
     },
   }
 }
@@ -214,7 +134,7 @@ export default {
 .annotation-aside {
   @apply absolute text-gray-600 ml-auto w-1/3;
   right: 0;
-  // transition: transform 0.25s ease;
+  transition: transform 0.25s ease;
   h3 {
     @apply font-display text-gray-600;
     font-size: 18px;
@@ -239,11 +159,19 @@ export default {
   }
 }
 
+
+.annotation-video {
+  @apply mb-4;
+  max-height: 400px;
+  opacity: 100%;
+}
+
 .openBox-enter-active {
-  transition: max-height 0.25s ease;
+  transition: max-height 0.25s ease, opacity 0.25s ease;
 }
 
 .openBox-enter, .openBox-leave-to {
   max-height: 0px;
+  opacity: 0;
 }
 </style>

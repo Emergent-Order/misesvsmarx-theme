@@ -21,6 +21,10 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    setPostOffset(state, { id, offset }) {
+      let post = state.posts.find(post => post.id == id)
+      post.offset = offset
+    },
     setPosts(state, arr) {
       state.posts = arr
     },
@@ -74,6 +78,7 @@ const store = new Vuex.Store({
           open: false,
           ...post,
           index: null,
+          offset: 0,
           hasVideo,
           videoEmbed,
           externalUrl,
@@ -85,20 +90,25 @@ const store = new Vuex.Store({
       return annotations
     },
     async openAnnotation({ state, getters }, id) {
+      console.log('Opened!')
       const post = getters.getPost(id)
 
       // Open selected post, close other posts
       const newPosts = await state.posts.map(post => {
         if (post.id === id) {
           post.open = true
+          post.offset = 0
           return post
         } else {
           post.open = false
+          post.offset = 0
           return post
         }
       })
 
       state.posts = newPosts
+
+      return newPosts
     },
     setAllCoordinates({ state, getters, commit }, children) {
       let prevPostBottom = 0
