@@ -76,9 +76,10 @@ const store = new Vuex.Store({
 
         return {
           open: false,
-          ...post,
           index: null,
           offset: 0,
+          top: 0,
+          ...post,
           hasVideo,
           videoEmbed,
           externalUrl,

@@ -9,14 +9,16 @@
       class="annotation-aside"
       :style="style"
     >
-      <template v-if="hasVideo">
+      <div ref="video" class="annotation-video responsive-embed" v-if="hasVideo">
         <transition name="openBox">
-          <div v-show="open"
-            class="annotation-video responsive-embed"
-            v-html="videoEmbed"
-          ></div>
+          <youtube
+            v-if="open"
+            ref="youtube"
+            :video-id="videoId"
+            :player-vars="playerVars"
+          ></youtube>
         </transition>
-      </template>
+      </div>
       <h3>{{ getRendered(post.title) }}</h3>
       <div class="annotation-excerpt" v-html="getRendered(post.excerpt)"></div>
     </aside>
@@ -25,7 +27,8 @@
 
 <script>
 const he = require('he')
-// import resize from 'vue-resize-directive'
+const getVideoId = require('get-video-id')
+
 export default {
   name: "Annotation",
   props: {
@@ -37,17 +40,53 @@ export default {
   data() {
     return {
       y: 0,
-      offsetY: 0
+      offsetY: 0,
+      playerVars: {
+        origin: window.location.origin
+      }
     }
   },
   watch: {
-    post: {
-      handler: function(val) {
-        console.log('handling post change', val.offset)
-        this.y = val.top
-        this.offsetY = val.offset
-      },
-      deep: true
+    'post.top': function(val) {
+      this.y = val
+    },
+    'post.offset': function(newVal, oldVal) {
+      if (newVal === oldVal) return null
+
+      console.log('Offset watcher triggered', newVal)
+      const app = this
+      app.$refs.box.style.translateY = newVal + 'px'
+      // this.$anime({
+      //   targets: app.$refs.box,
+      //   translateY: newVal,
+      //   easing: 'easeInOutExpo',
+      //   duration: 500,
+      // })
+    },
+    'post.open': function(val) {
+      const app = this
+      if (val) {
+        this.$anime({
+          targets: app.$refs.video,
+          paddingBottom: '56.25%',
+          easing: 'easeInOutExpo',
+          duration: 500,
+          update: function(anim) {
+            if (app.maybeMoveNextPost) {
+              const val = (app.targetHeight * anim.progress / 100)
+              app.nextPost.$refs.box.style.transform = `translateY(${val}px)`
+              // app.nextPost.setOffset(app.targetHeight * anim.progress / 100)
+            }
+          }
+        })
+      } else {
+        this.$anime({
+          targets: app.$refs.video,
+          paddingBottom: 0,
+          easing: 'easeInOutExpo',
+          duration: 500,
+        })
+      }
     }
   },
   computed: {
@@ -56,6 +95,26 @@ export default {
     },
     slug() {
       return this.post.slug
+    },
+    targetHeight() {
+      return this.$refs.box.offsetWidth * 9 / 16
+    },
+    maybeMoveNextPost() {
+      // If next post is within the box range
+      // and we're on desktop, return true
+      const nextPost = this.$parent.$children[this.index + 1]
+      const nextPostTop = nextPost.$refs.box.offsetTop
+      const targetHeight = this.$refs.box.offsetHeight + this.$refs.box.offsetWidth * 9 / 16
+      const targetBottom = targetHeight + this.y
+
+      if (targetBottom > nextPostTop + 40) {
+        return true
+      } else {
+        return false
+      }
+    },
+    nextPost() {
+      return this.$parent.$children[this.index + 1]
     },
     prevPost() {
       return this.$store.getters.getPostByIndex(this.index - 1)
@@ -69,22 +128,30 @@ export default {
     videoEmbed() {
       return this.post.videoEmbed
     },
+    videoId() {
+      var regex = /<iframe.*?s*src="(.*?)".*?<\/iframe>/
+      var src = regex.exec(this.videoEmbed)
+      return src ? getVideoId(src[1]).id : null
+    },
     open() {
       return this.post.open
     },
     style() {
-      return `top: ${ this.y }px; transform: translateY(${ this.post.offset }px);`
+      return `top: ${ this.y }px;`
     },
+    player() {
+      return this.hasVideo ? this.$refs.youtube.player : null
+    }
   },
   methods: {
     setOffset(y, slug) {
       this.$store.commit('setPostOffset', {
         id: this.post.id,
-        offset: y,
-        slug: this.slug
+        offset: y
       })
     },
-    handleResize() {
+    handleResize(event) {
+      console.log('handleResize triggered for', this.slug, event)
       const nextPost = this.$parent.$children[this.index + 1]
       if (!nextPost) { return false }
 
@@ -105,9 +172,11 @@ export default {
       return obj ? he.decode(obj.rendered) : ''
     },
     async openAnnotation() {
+      const app = this
       this.setOffset(0)
-      this.$store.dispatch('openAnnotation', this.post.id).then(() => {
-        this.handleResize()
+      this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
+        app.handleResize()
+        if (app.player) await app.player.playVideo()
       })
     },
   }
@@ -134,7 +203,7 @@ export default {
 .annotation-aside {
   @apply absolute text-gray-600 ml-auto w-1/3;
   right: 0;
-  transition: transform 0.25s ease;
+  // transition: transform 0.25s ease;
   h3 {
     @apply font-display text-gray-600;
     font-size: 18px;
@@ -162,16 +231,22 @@ export default {
 
 .annotation-video {
   @apply mb-4;
-  max-height: 400px;
-  opacity: 100%;
-}
-
-.openBox-enter-active {
-  transition: max-height 0.25s ease, opacity 0.25s ease;
-}
-
-.openBox-enter, .openBox-leave-to {
   max-height: 0px;
-  opacity: 0;
+  opacity: 1;
+  padding-bottom: 0px;
 }
+
+// .is-open .annotation-video {
+//   padding-bottom: 56.25%;
+//   // transition: padding 0.25s ease;
+// }
+
+// .openBox-enter-active {
+//   transition: max-height 0.25s ease, opacity 0.25s ease;
+// }
+//
+// .openBox-enter, .openBox-leave-to {
+//   max-height: 0px;
+//   opacity: 0;
+// }
 </style>
