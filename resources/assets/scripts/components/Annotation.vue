@@ -78,7 +78,14 @@ export default {
         })
 
         if(app.maybeMoveNextPost) {
-          app.nextPost.setOffset(app.targetHeight)
+          /* -------------------------------------------------------------
+          // Use nextTick here to ensure that when there's a race condition
+          // between resetting the offset to 0 and moving the next post,
+          // moving the next post is the last instruction
+          // ------------------------------------------------------------- */
+          this.$nextTick(() => {
+            app.nextPost.setOffset(app.targetHeight)
+          })
         }
       } else {
         this.$anime({
