@@ -18,8 +18,10 @@
     </div>
   </div>
   <div id="intro">
-    <div class="row">
-      @php the_field('instructions') @endphp
+    <div class="container mx-auto">
+      <div class="wrap">
+        @php the_field('instructions') @endphp
+      </div>
     </div>
   </div>
   @php

@@ -24,15 +24,14 @@
 }
 
 .home #intro {
-  @apply border-b border-gray-400 my-10 mx-4;
   font-size: 18px;
   @include grid('lg') {
     @apply mx-0;
   }
 }
 
-.home #intro .row {
-  @apply w-full;
+.home #intro .container .wrap {
+  @apply border-b border-gray-400 my-4 mx-auto px-4;
 
   p {
     @apply text-gray-600;
