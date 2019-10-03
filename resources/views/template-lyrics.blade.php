@@ -5,14 +5,14 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="header bg-red-dark">
-    <div class="flex container mx-auto py-20">
-      <div class="col-left w-1/2 px-8">
+  <div id="hero" class="header bg-red-dark">
+    <div class="flex container mx-auto justify-between items-center py-20">
+      <div class="col-left w-7/12 pr-4">
         <div class="responsive-embed">
           @php the_field('header_video') @endphp
         </div>
       </div>
-      <div class="col-right w-1/2 px-8">
+      <div class="col-right w-5/12 pl-4">
         @php the_field('header_intro') @endphp
       </div>
     </div>

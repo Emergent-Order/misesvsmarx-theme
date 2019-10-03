@@ -1,6 +1,11 @@
 .home #hero {
   h1 {
-    font-family: 'AmericanCaptainEternal';
+    @apply font-captain font-normal text-gold-light uppercase;
+    font-size: 96px;
+    line-height: .85;
+  }
+  p {
+    @apply text-gold-bright font-work font-normal;
   }
 }
 

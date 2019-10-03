@@ -1,11 +1,7 @@
-.banner .nav {
-  @apply flex flex-wrap;
-}
+.banner .brand {
+  @apply flex no-underline border-none;
 
-.banner .nav a {
-  @apply inline-block px-4 py-2 border-none;
-
-  &:hover {
-    color: darken(#525ddc, 30%);
+  @include grid($large) {
+    @apply flex-row items-end;
   }
 }
