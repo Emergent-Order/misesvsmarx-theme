@@ -25,7 +25,8 @@ module.exports = {
       gray: {
         900: "#333333",
         600: "#979797",
-        400: "#DADADA"
+        400: "#DADADA",
+        200: "#E5E5E5"
       },
       red: {
         dark: "#7F2D14",
@@ -36,7 +37,8 @@ module.exports = {
         light: "#F2EFE6",
         bright: "#F0E0AD"
       },
-      white: '#ffffff'
+      white: '#ffffff',
+      transparent: 'transparent'
     },
     // screens: {
     //   'xl': {

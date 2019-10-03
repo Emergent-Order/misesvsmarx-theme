@@ -1,6 +1,6 @@
 <template>
   <div ref="audio" id="media-player" class="container mx-auto">
-    <vue-plyr ref="plyr" :options="options">
+    <vue-plyr ref="plyr" :options="options" class="player">
       <audio>
         <source :src="audio.url" />
       </audio>

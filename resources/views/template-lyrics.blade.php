@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  <div id="intro" class="container mx-auto">
+  <div id="intro">
     <div class="row">
       @php the_field('instructions') @endphp
     </div>

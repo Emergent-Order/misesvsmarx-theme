@@ -10,6 +10,9 @@ Vue.use(VueAnime)
 import VuePlyr from 'vue-plyr'
 Vue.use(VuePlyr)
 
+import VueWindowSize from 'vue-window-size'
+Vue.use(VueWindowSize)
+
 // Vuex Store
 import store from './store'
 

@@ -24,20 +24,31 @@
 }
 
 .home #intro {
-  @apply border-b border-gray-400 my-10;
+  @apply border-b border-gray-400 my-10 mx-4;
   font-size: 18px;
-  .row {
+  @include grid('lg') {
+    @apply mx-0;
+  }
+}
+
+.home #intro .row {
+  @apply w-full;
+
+  p {
+    @apply text-gray-600;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  @include grid('lg') {
     @apply w-1/2 my-8 mr-auto ml-0;
-    p {
-      @apply text-gray-600;
-      font-size: 20px;
-      line-height: 1.4;
-    }
+    p { font-size: 20px; }
   }
 }
 
 
 #lyrics .container {
+  @apply px-4;
   @include grid('lg') {
     padding-left: 98px;
   }
@@ -45,8 +56,12 @@
 
 #lyrics p {
   @apply text-gray-900 font-normal mb-8;
-  font-size: 22px;
   line-height: 1.5;
+  font-size: 16px;
+
+  @include grid('lg') {
+    font-size: 22px;
+  }
 }
 
 #lyrics h4 {

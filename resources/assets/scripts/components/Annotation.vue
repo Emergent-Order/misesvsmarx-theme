@@ -39,6 +39,7 @@ export default {
     return {
       y: 0,
       offsetY: 0,
+      originalHeight: 0,
       playerVars: {
         origin: window.location.origin
       }
@@ -68,6 +69,30 @@ export default {
     'post.open': function(val) {
       const app = this
       if (val) {
+        if (app.isMobile) {
+          const paragraph = app.$refs.box.closest('p')
+          const box = app.$refs.box
+          const height = app.originalHeight + box.offsetHeight + this.targetHeight
+          const y = app.originalHeight + 16
+
+          this.$nextTick(() => {
+            app.$anime({
+              targets: app.$refs.box,
+              opacity: 1,
+              translateY: y,
+              duration: 500,
+              easing: 'easeInOutExpo'
+            })
+
+            app.$anime({
+              targets: paragraph,
+              height: height,
+              easing: 'easeInOutExpo',
+              duration: 500
+            })
+          })
+        }
+
         this.$anime({
           targets: app.$refs.video,
           paddingBottom: '56.25%',
@@ -93,8 +118,39 @@ export default {
           duration: 500,
         })
 
+        app.$anime({
+          targets: app.$refs.box,
+          // opacity: 0,
+          translateY: 0,
+          duration: 500,
+          easing: 'easeInOutExpo'
+        })
+
         if(app.maybeMoveNextPost) {
           app.nextPost.setOffset(0)
+        }
+
+        if(app.isMobile) {
+          const paragraph = app.$refs.box.closest('p')
+          const box = app.$refs.box
+
+          app.$anime({
+            targets: app.$refs.box,
+            opacity: 0,
+            // translateY: 0,
+            duration: 500,
+            easing: 'easeInOutExpo'
+          })
+
+          app.$anime({
+            targets: paragraph,
+            height: app.originalHeight,
+            easing: 'easeInOutExpo',
+            duration: 500,
+            complete: function() {
+              paragraph.style.height = null
+            }
+          })
         }
       }
     }
@@ -108,6 +164,9 @@ export default {
     },
     targetHeight() {
       return this.$refs.box.offsetWidth * 9 / 16
+    },
+    isMobile() {
+      return this.windowWidth < 1024
     },
     maybeMoveNextPost() {
       // If next post is within the box range
@@ -147,6 +206,7 @@ export default {
       return this.post.open
     },
     style() {
+      if (this.windowWidth < 1024) return null
       return `top: ${ this.y }px;`
     },
     player() {
@@ -155,11 +215,16 @@ export default {
   },
   methods: {
     setOffset(y) {
+      if (this.windowWidth < 1024) return null
       // console.log('setting offset for', this.slug, 'of', y)
       this.$store.commit('setPostOffset', {
         id: this.post.id,
         offset: y
       })
+    },
+    getParagraphHeight() {
+      const paragraph = this.$refs.box.closest('p')
+      return paragraph.offsetHeight
     },
     handleResize(event) {
       // console.log('handleResize triggered for', this.slug, event)
@@ -191,6 +256,9 @@ export default {
         if (app.player) await app.player.playVideo()
       })
     },
+  },
+  mounted() {
+    this.originalHeight = this.getParagraphHeight()
   }
 }
 </script>
