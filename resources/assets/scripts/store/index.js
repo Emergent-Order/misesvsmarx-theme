@@ -10,7 +10,8 @@ const site = WPAPI.discover(globals.siteUrl)
 
 const store = new Vuex.Store({
   state: {
-    posts: []
+    posts: [],
+    playing: false
   },
   getters: {
     getPost: (state) => (id) => {
@@ -61,6 +62,12 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    pauseAudio({ state }) {
+      state.playing = false
+    },
+    playAudio({ state }) {
+      state.playing = true
+    },
     async getAnnotations({ state }) {
       const site = await WPAPI.discover(globals.siteUrl)
       const posts = await site.annotations().perPage(50).get()

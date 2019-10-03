@@ -29,12 +29,14 @@ module.exports = {
       },
       red: {
         dark: "#7F2D14",
+        darker: "#491709",
         bright: "#B5431F"
       },
       gold: {
         light: "#F2EFE6",
         bright: "#F0E0AD"
-      }
+      },
+      white: '#ffffff'
     },
     extend: {}
   },

@@ -31,5 +31,5 @@
       @include('partials.content-page')
     @endwhile
   </Lyrics>
-  <media-player data="@php the_field('audio_file') @endphp" />
+  <MediaPlayer post="@php echo urlencode(json_encode(get_field('audio_file'))) @endphp" />
 @endsection

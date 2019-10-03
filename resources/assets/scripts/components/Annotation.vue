@@ -53,7 +53,7 @@ export default {
     'post.offset': function(newVal, oldVal) {
       if (newVal === oldVal) return null
 
-      console.log('Offset watcher triggered for', this.post.slug, newVal)
+      // console.log('Offset watcher triggered for', this.post.slug, newVal)
       const app = this
       this.$anime({
         targets: app.$refs.box,
@@ -63,7 +63,7 @@ export default {
       })
 
       if(app.maybeMoveNextPost) {
-        console.log('Next post is', app.nextPost.slug, 'which should move', newVal)
+        // console.log('Next post is', app.nextPost.slug, 'which should move', newVal)
         app.nextPost.setOffset(newVal)
       }
     },
@@ -157,14 +157,14 @@ export default {
   },
   methods: {
     setOffset(y) {
-      console.log('setting offset for', this.slug, 'of', y)
+      // console.log('setting offset for', this.slug, 'of', y)
       this.$store.commit('setPostOffset', {
         id: this.post.id,
         offset: y
       })
     },
     handleResize(event) {
-      console.log('handleResize triggered for', this.slug, event)
+      // console.log('handleResize triggered for', this.slug, event)
       const nextPost = this.$parent.$children[this.index + 1]
       if (!nextPost) { return false }
 
@@ -187,6 +187,7 @@ export default {
     async openAnnotation() {
       const app = this
       this.setOffset(0)
+      this.$store.dispatch('pauseAudio')
       this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
         app.handleResize()
         if (app.player) await app.player.playVideo()
