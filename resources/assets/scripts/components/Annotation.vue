@@ -53,15 +53,19 @@ export default {
     'post.offset': function(newVal, oldVal) {
       if (newVal === oldVal) return null
 
-      console.log('Offset watcher triggered', newVal)
+      console.log('Offset watcher triggered for', this.post.slug, newVal)
       const app = this
-      app.$refs.box.style.translateY = newVal + 'px'
-      // this.$anime({
-      //   targets: app.$refs.box,
-      //   translateY: newVal,
-      //   easing: 'easeInOutExpo',
-      //   duration: 500,
-      // })
+      this.$anime({
+        targets: app.$refs.box,
+        translateY: newVal,
+        easing: 'easeInOutExpo',
+        duration: 500,
+      })
+
+      if(app.maybeMoveNextPost) {
+        console.log('Next post is', app.nextPost.slug, 'which should move', newVal)
+        app.nextPost.setOffset(newVal)
+      }
     },
     'post.open': function(val) {
       const app = this
@@ -70,15 +74,12 @@ export default {
           targets: app.$refs.video,
           paddingBottom: '56.25%',
           easing: 'easeInOutExpo',
-          duration: 500,
-          update: function(anim) {
-            if (app.maybeMoveNextPost) {
-              const val = (app.targetHeight * anim.progress / 100)
-              app.nextPost.$refs.box.style.transform = `translateY(${val}px)`
-              // app.nextPost.setOffset(app.targetHeight * anim.progress / 100)
-            }
-          }
+          duration: 500
         })
+
+        if(app.maybeMoveNextPost) {
+          app.nextPost.setOffset(app.targetHeight)
+        }
       } else {
         this.$anime({
           targets: app.$refs.video,
@@ -86,6 +87,10 @@ export default {
           easing: 'easeInOutExpo',
           duration: 500,
         })
+
+        if(app.maybeMoveNextPost) {
+          app.nextPost.setOffset(0)
+        }
       }
     }
   },
@@ -144,7 +149,8 @@ export default {
     }
   },
   methods: {
-    setOffset(y, slug) {
+    setOffset(y) {
+      console.log('setting offset for', this.slug, 'of', y)
       this.$store.commit('setPostOffset', {
         id: this.post.id,
         offset: y

@@ -98,11 +98,11 @@ const store = new Vuex.Store({
       const newPosts = await state.posts.map(post => {
         if (post.id === id) {
           post.open = true
-          post.offset = 0
+          // post.offset = 0
           return post
         } else {
           post.open = false
-          post.offset = 0
+          // post.offset = 0
           return post
         }
       })
