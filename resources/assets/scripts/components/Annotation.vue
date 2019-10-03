@@ -10,14 +10,12 @@
       :style="style"
     >
       <div ref="video" class="annotation-video responsive-embed" v-if="hasVideo">
-        <transition name="openBox">
-          <youtube
-            v-if="open"
-            ref="youtube"
-            :video-id="videoId"
-            :player-vars="playerVars"
-          ></youtube>
-        </transition>
+        <youtube
+          v-if="open"
+          ref="youtube"
+          :video-id="videoId"
+          :player-vars="playerVars"
+        ></youtube>
       </div>
       <h3>{{ getRendered(post.title) }}</h3>
       <div class="annotation-excerpt" v-html="getRendered(post.excerpt)"></div>
@@ -198,69 +196,89 @@ export default {
 </script>
 
 <style lang="scss">
-.mvm-has-annotation.annotation {
-  background: transparent !important;
-  display: inline;
-  @apply static cursor-pointer;
-}
-
-.annotation-text {
-  @apply relative;
-  display: inline;
-  margin-right: -0.25rem;
-  // padding: 0rem 0.25rem;
-  // margin-left: -0.25rem;
-  transition: all 0.25s ease;
-  background-color: #D8D8D8;
-}
-
-.annotation-aside {
-  @apply absolute text-gray-600 ml-auto w-1/3;
-  right: 0;
-  // transition: transform 0.25s ease;
-  h3 {
-    @apply font-display text-gray-600;
-    font-size: 18px;
-  }
-}
-
-#lyrics .annotation-excerpt * {
-  @apply font-body text-gray-600 font-medium;
-  font-size: 15px;
-}
-
-#lyrics .annotation:hover,
-#lyrics .annotation.is-open {
-  .annotation-text {
-    background-color: #F0E0AD;
-    transition: all 0.25s ease;
-  }
-
-  .annotation-aside h3 {
-    @apply text-black;
-    transition: all 0.25s ease;
-  }
-}
-
-
-.annotation-video {
-  @apply mb-4;
-  max-height: 0px;
-  opacity: 1;
-  padding-bottom: 0px;
-}
-
-// .is-open .annotation-video {
-//   padding-bottom: 56.25%;
-//   // transition: padding 0.25s ease;
-// }
-
-// .openBox-enter-active {
-//   transition: max-height 0.25s ease, opacity 0.25s ease;
+// .mvm-has-annotation.annotation {
+//   background: transparent !important;
+//   display: inline;
+//   @apply static cursor-pointer;
 // }
 //
-// .openBox-enter, .openBox-leave-to {
-//   max-height: 0px;
-//   opacity: 0;
+// .annotation-text {
+//   @apply relative;
+//   display: inline;
+//   margin-right: -0.25rem;
+//   // padding: 0rem 0.25rem;
+//   // margin-left: -0.25rem;
+//   transition: all 0.25s ease;
+//   background-color: #D8D8D8;
 // }
+//
+// .annotation-aside {
+//   @apply absolute text-gray-600 ml-auto w-1/3;
+//   @apply pl-10;
+//   padding-top: 16px;
+//   right: 0;
+//   h3 {
+//     @apply font-display text-gray-600;
+//     font-size: 18px;
+//   }
+//   p {
+//     margin-bottom: 16px !important;
+//   }
+// }
+//
+// #lyrics .annotation-excerpt * {
+//   @apply font-body text-gray-600 font-medium;
+//   font-size: 15px;
+// }
+//
+// #lyrics .annotation:hover,
+// #lyrics .annotation.is-open {
+//   .annotation-text {
+//     background-color: #F0E0AD;
+//     transition: all 0.25s ease;
+//   }
+//
+//   .annotation-aside h3 {
+//     @apply text-black;
+//     transition: all 0.25s ease;
+//   }
+// }
+//
+//
+// .annotation-video {
+//   @apply mb-4 bg-gray-400 rounded;
+//   max-height: 0px;
+//   padding-bottom: 0px;
+//   iframe {
+//     opacity: 0;
+//     transition: opacity 0.5s ease 0.5s;
+//   }
+// }
+//
+// .is-open .annotation-video iframe {
+//   opacity: 1;
+//   transition: opacity 0.5s ease 0.5s;
+// }
+//
+// .is-open .annotation-aside {
+//   @apply border-solid border-gold-bright;
+//   border-left-width: 3px;
+// }
+//
+// // .is-open .annotation-video {
+// //   padding-bottom: 56.25%;
+// //   // transition: padding 0.25s ease;
+// // }
+//
+// // .openBox-enter-active {
+// //   transition: opacity 0.25s ease;
+// // }
+// //
+// // .openBox-enter, .openBox-leave-to {
+// //   opacity: 1;
+// // }
+// //
+// // .openBox-leave {
+// //   opacity: 0;
+// // }
 </style>

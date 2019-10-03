@@ -16,20 +16,25 @@
 
 
 #media-player {
-  @apply fixed;
-  bottom: 40px;
+  @apply fixed px-2;
   left: 0;
   right: 0;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  bottom: 10px;
+
+  @include grid('lg') {
+    @apply px-0;
+    bottom: 40px;
+  }
 }
 
 #media-player .plyr__controls {
-  @apply bg-red-bright rounded p-6;
-  .plyr__volume { @apply ml-12; }
-  .plyr__time { @apply ml-3; }
+  @apply bg-red-bright rounded p-4;
+  .plyr__volume { @apply ml-4; }
+  .plyr__time { @apply ml-0; }
   .plyr__control {
     @apply text-white cursor-pointer;
-    &[data-plyr=play] { @apply mr-12; }
+    &[data-plyr=play] { @apply mr-2; }
     svg { @apply fill-current; }
     &:hover {
       @apply bg-white text-red-bright;
@@ -40,6 +45,13 @@
       @apply bg-white text-red-bright;
       box-shadow: 0 0 0 5px rgba(white, .2);
     }
+  }
+
+  @include grid('lg') {
+    @apply p-6;
+    .plyr__volume { @apply ml-12; }
+    .plyr__time { @apply ml-3; }
+    [data-plyr=play] { @apply mr-12; }
   }
 }
 

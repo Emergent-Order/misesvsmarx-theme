@@ -1,11 +1,25 @@
 .home #hero {
   h1 {
     @apply font-captain font-normal text-gold-light uppercase;
-    font-size: 96px;
     line-height: .85;
+    font-size: 72px;
+    @include grid('lg') {
+      font-size: 96px;
+    }
   }
   p {
     @apply text-gold-bright font-normal;
+  }
+
+  .container {
+    @apply px-4 flex-col py-8;
+
+    .col:first-of-type { @apply mb-8; }
+
+    @include grid('lg') {
+      @apply flex-row py-20;
+      .col:first-of-type { @apply mb-0; }
+    }
   }
 }
 
@@ -23,6 +37,12 @@
 }
 
 
+#lyrics .container {
+  @include grid('lg') {
+    padding-left: 98px;
+  }
+}
+
 #lyrics p {
   @apply text-gray-900 font-normal mb-8;
   font-size: 22px;
@@ -34,7 +54,7 @@
   font-size: 16px;
 
   // On large screens, move speaker to left
-  @include grid($large) {
+  @include grid('lg') {
     position: relative;
     text-align: right;
     display: inline-block;

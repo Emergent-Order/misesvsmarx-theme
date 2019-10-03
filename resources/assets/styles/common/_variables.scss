@@ -1,31 +1,28 @@
-$large: "1266px";
+$grid: (
+  "xl": "1280px",
+  "lg": "1024px",
+  "med": "768px",
+  "sm": "640px"
+);
+
+
+
+
+// $large: "1266px";
 
 $red-dark: #7F2D14;
 
 @mixin grid($above) {
-  @include breakpoint($above) {
+  @include breakpoint(map-get($grid, $above)) {
     @content;
   }
 }
 
 // ==========================================================================
-// Colors
+// Plyr Overrides
 // ==========================================================================
 
 $plyr-color-main: hsl(45, 32%, 93%);
-
-// Grayscale
-$plyr-color-gray-9: hsl(210, 15%, 16%);
-$plyr-color-gray-8: lighten($plyr-color-gray-9, 9%);
-$plyr-color-gray-7: lighten($plyr-color-gray-8, 9%);
-$plyr-color-gray-6: lighten($plyr-color-gray-7, 9%);
-$plyr-color-gray-5: lighten($plyr-color-gray-6, 9%);
-$plyr-color-gray-4: lighten($plyr-color-gray-5, 9%);
-$plyr-color-gray-3: lighten($plyr-color-gray-4, 9%);
-$plyr-color-gray-2: lighten($plyr-color-gray-3, 9%);
-$plyr-color-gray-1: lighten($plyr-color-gray-2, 9%);
-$plyr-color-gray-0: lighten($plyr-color-gray-1, 9%);
-
 $plyr-font-family: 'commuters-sans', 'sans-serif';
 
 $plyr-audio-controls-bg: #fff;

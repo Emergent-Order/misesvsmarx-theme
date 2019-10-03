@@ -6,13 +6,13 @@
 
 @section('content')
   <div id="hero" class="header bg-red-dark">
-    <div class="flex container mx-auto justify-between items-center py-20">
-      <div class="col-left w-7/12 pr-4">
+    <div class="flex container mx-auto justify-between items-center">
+      <div class="col w-full lg:w-7/12 lg:pr-4">
         <div class="responsive-embed">
           @php the_field('header_video') @endphp
         </div>
       </div>
-      <div class="col-right w-5/12 pl-4">
+      <div class="col w-full lg:w-5/12 lg:pl-4">
         @php the_field('header_intro') @endphp
       </div>
     </div>

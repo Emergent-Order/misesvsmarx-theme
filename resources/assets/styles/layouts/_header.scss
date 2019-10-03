@@ -1,7 +1,12 @@
 .banner .brand {
-  @apply flex no-underline border-none;
+  @apply no-underline border-none;
+  @apply flex-col px-4;
 
-  @include grid($large) {
+  svg {
+    max-width: 100%;
+  }
+
+  @include grid('lg') {
     @apply flex-row items-end;
   }
 }

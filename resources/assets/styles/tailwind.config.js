@@ -38,6 +38,11 @@ module.exports = {
       },
       white: '#ffffff'
     },
+    // screens: {
+    //   'xl': {
+    //     'max': '1266px'
+    //   }
+    // },
     extend: {}
   },
   variants: {},
