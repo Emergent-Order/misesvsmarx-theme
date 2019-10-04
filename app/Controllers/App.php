@@ -6,6 +6,8 @@ use Sober\Controller\Controller;
 
 class App extends Controller
 {
+    use Partials\Audio;
+
     public function siteName()
     {
         return get_bloginfo('name');
@@ -29,5 +31,43 @@ class App extends Controller
             return __('Not Found', 'sage');
         }
         return get_the_title();
+    }
+
+    public static function audio()
+    {
+        global $post;
+        $data = get_field('audio_file');
+
+        if ($data) {
+          return $data['url'];
+        } else {
+          return 'empty';
+        }
+    }
+
+    public static function annotations()
+    {
+      $args = array(
+        'post_type' => 'annotation',
+        'post_status' => 'publish',
+        'nopaging' => true
+      );
+
+      $query = new \WP_Query($args);
+      $posts = $query->get_posts();
+      $output = [];
+
+      foreach($posts as $post) {
+        $output[] = array(
+          'id' => $post->ID,
+          'title' => $post->post_title,
+          'excerpt' => $post->excerpt,
+          'content' => $post->content,
+          'video_url' => get_field('video_url', $post->ID),
+          'type' => get_field('type', $post->ID)
+        );
+      }
+
+      return json_encode($output);
     }
 }

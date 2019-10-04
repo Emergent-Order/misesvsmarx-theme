@@ -1,6 +1,7 @@
 const mix = require('laravel-mix')
 const tailwindcss = require('tailwindcss')
 require('laravel-mix-purgecss')
+require('laravel-mix-bundle-analyzer')
 
 /*
  |--------------------------------------------------------------------------
@@ -59,6 +60,9 @@ mix.browserSync({
 // Source maps when not in production.
 if (!mix.inProduction()) {
   mix.sourceMaps()
+  mix.bundleAnalyzer({
+    generateStatsFile: true
+  })
 }
 
 // Hash and version files in production.

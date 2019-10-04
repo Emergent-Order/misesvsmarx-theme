@@ -26,8 +26,8 @@
 </template>
 
 <script>
-const he = require('he')
 const getVideoId = require('get-video-id')
+const S = require('string')
 
 export default {
   name: "Annotation",
@@ -258,7 +258,8 @@ export default {
       }
     },
     getRendered(obj) {
-      return obj ? he.decode(obj.rendered) : ''
+      return obj ? S(obj.rendered).unescapeHTML().s : ''
+      // return obj ? he.decode(obj.rendered) : ''
     },
     async openAnnotation() {
       if (this.open) return false

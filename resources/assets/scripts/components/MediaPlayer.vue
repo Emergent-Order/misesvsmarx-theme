@@ -2,7 +2,7 @@
   <div ref="audio" id="media-player" class="container mx-auto">
     <vue-plyr ref="plyr" :options="options" class="player">
       <audio>
-        <source :src="audio.url" />
+        <source :src="url" />
       </audio>
     </vue-plyr>
   </div>
@@ -12,10 +12,10 @@
   export default {
     name: 'MediaPlayer',
     props: {
-      post: {
+      url: {
         type: String,
         default: ''
-      },
+      }
     },
     data() {
       return {
@@ -33,9 +33,6 @@
       }
     },
     computed: {
-      audio() {
-        return JSON.parse(decodeURIComponent(this.post))
-      },
       player() {
         return this.$refs.plyr.player
       },

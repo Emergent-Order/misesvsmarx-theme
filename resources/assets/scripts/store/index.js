@@ -69,17 +69,19 @@ const store = new Vuex.Store({
       state.playing = true
     },
     async getAnnotations({ state }) {
-      const site = await WPAPI.discover(globals.siteUrl)
-      const posts = await site.annotations().perPage(50).get()
+      // const site = await WPAPI.discover(globals.siteUrl)
+      // const posts = await site.annotations().perPage(50).get()
+
+      const posts = window.__data
 
       // Set posts
       state.posts = posts
 
       // Set annotations
       const annotations = await posts.map((post, index) => {
-        const hasVideo = post.acf ? post.acf.type === "Video" : null
-        const videoEmbed = hasVideo ? post.acf.video_url : null
-        const externalUrl = !hasVideo ? post.acf.other_url : null
+        const hasVideo = post ? post.type === "Video" : null
+        const videoEmbed = hasVideo ? post.video_url : null
+        // const externalUrl = !hasVideo ? post.acf.other_url : null
 
         return {
           open: false,
@@ -89,7 +91,7 @@ const store = new Vuex.Store({
           ...post,
           hasVideo,
           videoEmbed,
-          externalUrl,
+          // externalUrl,
         }
       })
 
