@@ -10,12 +10,20 @@
       :style="style"
     >
       <div ref="video" class="annotation-video responsive-embed" v-if="hasVideo">
-        <youtube
-          v-if="open"
+        <!-- <youtube
+          v-show="open"
           ref="youtube"
           :video-id="videoId"
           :player-vars="playerVars"
-        ></youtube>
+        ></youtube> -->
+        <vue-plyr ref="plyr" :options="playerOpts">
+          <div class="plyr__video-embed">
+            <iframe
+              :src="videoUrl"
+              allowfullscreen allowtransparency allow="autoplay">
+            </iframe>
+          </div>
+        </vue-plyr>
       </div>
       <h3>{{ getRendered(post.title) }}</h3>
       <div class="annotation-excerpt" v-html="getRendered(post.excerpt)"></div>
@@ -41,7 +49,20 @@ export default {
       offsetY: 0,
       originalHeight: 0,
       playerVars: {
-        origin: window.location.origin
+        // origin: window.location.href,
+        autoplay: 1,
+        // host: `${window.location.protocol}//www.youtube.com`
+      },
+      playerOpts: {
+        youtube: {
+          noCookie: false,
+          rel: 0,
+          showinfo: 0,
+          iv_load_policy: 3,
+          modestbranding: 1,
+          autoplay: 1
+        },
+        settings: []
       }
     }
   },
@@ -209,14 +230,19 @@ export default {
       if (this.windowWidth < 1024) return null
       return `top: ${ this.y }px;`
     },
+    // player() {
+    //   return this.hasVideo ? this.$refs.youtube.player : null
+    // },
     player() {
-      return this.hasVideo ? this.$refs.youtube.player : null
+      return this.hasVideo ? this.$refs.plyr.player : null
+    },
+    videoUrl() {
+      return `https://www.youtube.com/embed/${this.videoId}?iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`
     }
   },
   methods: {
     setOffset(y) {
       if (this.windowWidth < 1024) return null
-      // console.log('setting offset for', this.slug, 'of', y)
       this.$store.commit('setPostOffset', {
         id: this.post.id,
         offset: y
@@ -248,12 +274,16 @@ export default {
       return obj ? he.decode(obj.rendered) : ''
     },
     async openAnnotation() {
+      if (this.open) return false
       const app = this
       this.setOffset(0)
       this.$store.dispatch('pauseAudio')
       this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
         app.handleResize()
-        if (app.player) await app.player.playVideo()
+        if (app.player) {
+          app.player.restart()
+          app.player.play()
+        }
       })
     },
   },
@@ -262,91 +292,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-// .mvm-has-annotation.annotation {
-//   background: transparent !important;
-//   display: inline;
-//   @apply static cursor-pointer;
-// }
-//
-// .annotation-text {
-//   @apply relative;
-//   display: inline;
-//   margin-right: -0.25rem;
-//   // padding: 0rem 0.25rem;
-//   // margin-left: -0.25rem;
-//   transition: all 0.25s ease;
-//   background-color: #D8D8D8;
-// }
-//
-// .annotation-aside {
-//   @apply absolute text-gray-600 ml-auto w-1/3;
-//   @apply pl-10;
-//   padding-top: 16px;
-//   right: 0;
-//   h3 {
-//     @apply font-display text-gray-600;
-//     font-size: 18px;
-//   }
-//   p {
-//     margin-bottom: 16px !important;
-//   }
-// }
-//
-// #lyrics .annotation-excerpt * {
-//   @apply font-body text-gray-600 font-medium;
-//   font-size: 15px;
-// }
-//
-// #lyrics .annotation:hover,
-// #lyrics .annotation.is-open {
-//   .annotation-text {
-//     background-color: #F0E0AD;
-//     transition: all 0.25s ease;
-//   }
-//
-//   .annotation-aside h3 {
-//     @apply text-black;
-//     transition: all 0.25s ease;
-//   }
-// }
-//
-//
-// .annotation-video {
-//   @apply mb-4 bg-gray-400 rounded;
-//   max-height: 0px;
-//   padding-bottom: 0px;
-//   iframe {
-//     opacity: 0;
-//     transition: opacity 0.5s ease 0.5s;
-//   }
-// }
-//
-// .is-open .annotation-video iframe {
-//   opacity: 1;
-//   transition: opacity 0.5s ease 0.5s;
-// }
-//
-// .is-open .annotation-aside {
-//   @apply border-solid border-gold-bright;
-//   border-left-width: 3px;
-// }
-//
-// // .is-open .annotation-video {
-// //   padding-bottom: 56.25%;
-// //   // transition: padding 0.25s ease;
-// // }
-//
-// // .openBox-enter-active {
-// //   transition: opacity 0.25s ease;
-// // }
-// //
-// // .openBox-enter, .openBox-leave-to {
-// //   opacity: 1;
-// // }
-// //
-// // .openBox-leave {
-// //   opacity: 0;
-// // }
-</style>

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
 // External libraries
-import VueYoutube from 'vue-youtube'
-Vue.use(VueYoutube)
+// import VueYoutube from 'vue-youtube'
+// Vue.use(VueYoutube)
 
 import VueAnime from 'vue-animejs'
 Vue.use(VueAnime)
