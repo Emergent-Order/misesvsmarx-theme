@@ -10,13 +10,7 @@
       :style="style"
     >
       <div ref="video" class="annotation-video responsive-embed" v-if="hasVideo">
-        <!-- <youtube
-          v-show="open"
-          ref="youtube"
-          :video-id="videoId"
-          :player-vars="playerVars"
-        ></youtube> -->
-        <vue-plyr ref="plyr" :options="playerOpts">
+        <vue-plyr v-if="open" ref="plyr" :key="post.slug" :options="playerOpts">
           <div class="plyr__video-embed">
             <iframe
               :src="videoUrl"
@@ -48,19 +42,16 @@ export default {
       y: 0,
       offsetY: 0,
       originalHeight: 0,
-      playerVars: {
-        // origin: window.location.href,
-        autoplay: 1,
-        // host: `${window.location.protocol}//www.youtube.com`
-      },
       playerOpts: {
+        autoplay: true,
+        muted: false,
         youtube: {
           noCookie: false,
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
           modestbranding: 1,
-          autoplay: 1
+          // autoplay: 1
         },
         settings: []
       }
