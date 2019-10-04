@@ -12,10 +12,13 @@ const tailwindcss = require('tailwindcss')
  |
  */
 
-const app       = 'app';
-const resources = 'resources';
-const assets    = `${resources}/assets`;
-const dist      = 'dist';
+const app       = 'app'
+const resources = 'resources'
+const assets    = `${resources}/assets`
+const dist      = 'dist'
+
+mix.setPublicPath(dist)
+mix.setResourceRoot('../')
 
 mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
   .options({
@@ -25,11 +28,12 @@ mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
     ]
   })
 
-mix.js(`${assets}/scripts/main.js`, `${dist}/scripts`)
+mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)
 
 // Assets
 mix.copy(`${assets}/fonts`, `${dist}/fonts`, false)
    .copy(`${assets}/images`, `${dist}/images`, false)
+   .copy(`${assets}/scripts/fonts-american-captain.js`, `${dist}/scripts`, false)
 
 mix.browserSync({
   host: 'localhost',
@@ -44,6 +48,16 @@ mix.browserSync({
     `${dist}/**/*.js`
   ]
 })
+
+// Source maps when not in production.
+if (!mix.inProduction()) {
+  mix.sourceMaps()
+}
+
+// Hash and version files in production.
+if (mix.inProduction()) {
+  mix.version()
+}
 
 // Full API
 // mix.js(src, output);

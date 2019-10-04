@@ -70,9 +70,15 @@ function template_path($file, $data = [])
  * @param $asset
  * @return string
  */
-function asset_path($asset)
-{
-    return sage('assets')->getUri($asset);
+// function asset_path($asset)
+// {
+//     return sage('assets')->getUri($asset);
+// }
+
+function asset_path($asset) {
+    $dist = sage('assets')->dist;
+    $path = sage('assets')->get($asset);
+    return $dist . $path;
 }
 
 /**

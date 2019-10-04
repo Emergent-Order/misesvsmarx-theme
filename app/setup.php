@@ -11,12 +11,12 @@ use Roots\Sage\Template\BladeProvider;
  * Theme assets
  */
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('misesvsmarx/main.css', asset_path('styles/main.css'), false, null);
+    wp_enqueue_style('misesvsmarx/main', asset_path('/styles/main.css'), false, null);
     wp_enqueue_style('typekit/fonts', "https://use.typekit.net/rnm6tqn.css", false, null);
     wp_enqueue_style('google/fonts', "https://fonts.googleapis.com/css?family=Work+Sans&display=swap", false, null);
 
-    wp_enqueue_script('misesvsmarx/main.js', asset_path('scripts/main.js'), [], null, true);
-    wp_localize_script('misesvsmarx/main.js', 'globals', array(
+    wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
+    wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url()
     ));
 
