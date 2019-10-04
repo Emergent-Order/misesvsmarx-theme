@@ -1,5 +1,6 @@
 const mix = require('laravel-mix')
 const tailwindcss = require('tailwindcss')
+require('laravel-mix-purgecss')
 
 /*
  |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ const app       = 'app'
 const resources = 'resources'
 const assets    = `${resources}/assets`
 const dist      = 'dist'
+const production = mix.inProduction()
 
 mix.setPublicPath(dist)
 mix.setResourceRoot('../')
@@ -26,6 +28,11 @@ mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
     postCss: [
       tailwindcss(`${assets}/styles/tailwind.config.js`),
     ]
+  })
+  .purgeCss({
+    enabled: production,
+    extensions: ['php', 'vue'],
+    whitelistPatterns: [/plyr/, /icon/, /annotation/]
   })
 
 mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)

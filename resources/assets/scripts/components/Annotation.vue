@@ -50,8 +50,7 @@ export default {
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
-          modestbranding: 1,
-          // autoplay: 1
+          modestbranding: 1
         },
         settings: []
       }
@@ -221,9 +220,6 @@ export default {
       if (this.windowWidth < 1024) return null
       return `top: ${ this.y }px;`
     },
-    // player() {
-    //   return this.hasVideo ? this.$refs.youtube.player : null
-    // },
     player() {
       return this.hasVideo ? this.$refs.plyr.player : null
     },
