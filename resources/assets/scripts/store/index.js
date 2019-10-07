@@ -3,9 +3,9 @@ import Vue from 'vue'
 import findIndex from 'lodash/findIndex'
 
 Vue.use(Vuex)
-
-const WPAPI = require('wpapi')
-const site = WPAPI.discover(globals.siteUrl)
+//
+// const WPAPI = require('wpapi')
+// const site = WPAPI.discover(globals.siteUrl)
 
 
 const store = new Vuex.Store({
@@ -65,13 +65,12 @@ const store = new Vuex.Store({
     pauseAudio({ state }) {
       state.playing = false
     },
-    playAudio({ state }) {
+    async playAudio({ state, dispatch }) {
+      await dispatch('closeAnnotations')
       state.playing = true
+      return true
     },
     async getAnnotations({ state }) {
-      // const site = await WPAPI.discover(globals.siteUrl)
-      // const posts = await site.annotations().perPage(50).get()
-
       const posts = window.__data
 
       // Set posts
@@ -98,6 +97,16 @@ const store = new Vuex.Store({
       this.commit('setPosts', annotations)
 
       return annotations
+    },
+    async closeAnnotations({ state, getters}) {
+      const newPosts = await state.posts.map(post => {
+        post.open = false
+        return post
+      })
+
+      state.posts = newPosts
+
+      return newPosts
     },
     async openAnnotation({ state, getters }, id) {
       console.log('Opened!')
