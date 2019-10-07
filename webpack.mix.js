@@ -1,6 +1,7 @@
 const mix = require('laravel-mix')
 const tailwindcss = require('tailwindcss')
 require('laravel-mix-purgecss')
+require('laravel-mix-bundle-analyzer')
 
 /*
  |--------------------------------------------------------------------------
@@ -31,8 +32,9 @@ mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
   })
   .purgeCss({
     enabled: production,
-    extensions: ['php', 'vue'],
-    whitelistPatterns: [/plyr/, /icon/, /annotation/]
+    extensions: ['php', 'blade', 'vue'],
+    whitelistPatterns: [/plyr/, /icon/, /annotation/],
+    whitelistPatternsChildren: [/lyrics/]
   })
 
 mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)
@@ -59,6 +61,9 @@ mix.browserSync({
 // Source maps when not in production.
 if (!mix.inProduction()) {
   mix.sourceMaps()
+  mix.bundleAnalyzer({
+    generateStatsFile: true
+  })
 }
 
 // Hash and version files in production.

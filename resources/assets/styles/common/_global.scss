@@ -1,24 +1,21 @@
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply mb-2 leading-tight text-black font-extrabold;
-  @apply font-display;
-  font-weight: 800;
-}
+.template-lyrics {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mb-2 leading-tight text-black font-extrabold;
+    @apply font-display;
+    font-weight: 800;
+  }
 
-p {
-  @apply mb-3 leading-normal font-body text-gray-900;
-}
+  p {
+    @apply mb-3 leading-normal font-body text-gray-900;
+  }
 
-a {
-  @apply text-gray-900 no-underline border-b;
-
-  transition: 0.2s ease;
-
-  &:hover {
-    // @apply border-primary;
+  a {
+    @apply text-gray-900 no-underline border-b;
+    transition: 0.2s ease;
   }
 }

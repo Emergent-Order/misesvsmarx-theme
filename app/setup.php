@@ -11,18 +11,19 @@ use Roots\Sage\Template\BladeProvider;
  * Theme assets
  */
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style('misesvsmarx/main', asset_path('/styles/main.css'), false, null);
-    wp_enqueue_style('typekit/fonts', "https://use.typekit.net/rnm6tqn.css", false, null);
-    wp_enqueue_style('google/fonts', "https://fonts.googleapis.com/css?family=Work+Sans&display=swap", false, null);
+    wp_enqueue_style('misesvsmarx/main', asset_path('/styles/main.css'), true, null);
+    wp_enqueue_style('typekit/fonts', "https://use.typekit.net/rnm6tqn.css", true, null);
+    wp_enqueue_style('google/fonts', "https://fonts.googleapis.com/css?family=Work+Sans&display=swap", true, null);
+
+    // Remove unused Wordpress stuff
+    wp_dequeue_style( 'wpsl-styles' );
+    wp_dequeue_style( 'wp-block-style' );
+    wp_dequeue_style( 'wp-block-library' );
 
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url()
     ));
-
-    if (is_single() && comments_open() && get_option('thread_comments')) {
-        wp_enqueue_script('comment-reply');
-    }
 }, 100);
 
 /**

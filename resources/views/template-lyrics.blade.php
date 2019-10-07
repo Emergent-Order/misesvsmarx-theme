@@ -24,14 +24,17 @@
       </div>
     </div>
   </div>
-  @php
-    $blocks = parse_blocks($post->post_content);
-  @endphp
-  {{-- <Lyrics blocks='{!! json_encode($blocks) !!}'></Lyrics> --}}
   <Lyrics id="lyrics">
     @while(have_posts()) @php the_post() @endphp
       @include('partials.content-page')
     @endwhile
   </Lyrics>
-  <MediaPlayer post="@php echo urlencode(json_encode(get_field('audio_file'))) @endphp" />
+  <MediaPlayer url="{!! App::audio() !!}" />
+@endsection
+
+@section('data')
+  <script id="data">
+    window.__data = {!! App::annotations() !!};
+    console.log(window.__data);
+  </script>
 @endsection
