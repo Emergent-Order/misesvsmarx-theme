@@ -96,6 +96,7 @@
   max-height: 0px;
   padding-bottom: 0px;
   iframe {
+    @apply rounded;
     opacity: 0;
     transition: opacity 0.5s ease 0.5s;
   }

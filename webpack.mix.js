@@ -42,7 +42,6 @@ mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)
 // Assets
 mix.copy(`${assets}/fonts`, `${dist}/fonts`, false)
    .copy(`${assets}/images`, `${dist}/images`, false)
-   .copy(`${assets}/scripts/fonts-american-captain.js`, `${dist}/scripts`, false)
 
 mix.browserSync({
   host: 'localhost',

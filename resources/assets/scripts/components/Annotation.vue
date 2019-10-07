@@ -28,6 +28,7 @@
 <script>
 const getVideoId = require('get-video-id')
 const S = require('string')
+const qs = require('querystringify')
 
 export default {
   name: "Annotation",
@@ -43,14 +44,21 @@ export default {
       offsetY: 0,
       originalHeight: 0,
       playerOpts: {
-        autoplay: true,
-        muted: false,
         youtube: {
           noCookie: false,
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
-          modestbranding: 1
+          modestbranding: 1,
+          enablejsapi: 1
+        },
+        vimeo: {
+          byline: false,
+          controls: false,
+          loop: false,
+          playsinline: true,
+          portrait: false,
+          transparent: true
         },
         settings: []
       }
@@ -208,6 +216,9 @@ export default {
     videoEmbed() {
       return this.post.videoEmbed
     },
+    video() {
+      return this.hasVideo ? getVideoId(this.videoEmbed) : null
+    },
     videoId() {
       var regex = /<iframe.*?s*src="(.*?)".*?<\/iframe>/
       var src = regex.exec(this.videoEmbed)
@@ -224,7 +235,28 @@ export default {
       return this.hasVideo ? this.$refs.plyr.player : null
     },
     videoUrl() {
-      return `https://www.youtube.com/embed/${this.videoId}?iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`
+      // Return false if anything went wrong with the video ID
+      if (!this.hasVideo || !this.videoId) return false
+      const id = this.videoId
+      let q
+
+      // Turn off autoplay for mobile devices
+      let autoplay = !this.isMobile
+
+      switch (this.video.service) {
+        case 'vimeo':
+          q = qs.stringify({
+            autoplay: autoplay
+          }, true)
+          return `https://player.vimeo.com/video/${id}${q}`
+        case 'youtube':
+          q = qs.stringify({
+            autoplay: autoplay ? 1 : 0
+          }, true)
+          return `https://www.youtube.com/embed/${id}${q}`
+        default:
+          return ''
+      }
     },
     content() {
       return this.post.content ? this.post.content : ""

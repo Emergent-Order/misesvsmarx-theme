@@ -21,6 +21,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_dequeue_style( 'wp-block-library' );
 
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
+    wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url()
     ));
@@ -136,18 +137,4 @@ add_action('after_setup_theme', function () {
     sage('blade')->compiler()->directive('asset', function ($asset) {
         return "<?= " . __NAMESPACE__ . "\\asset_path({$asset}); ?>";
     });
-
-    // Create SVG directive
-    // sage('blade')->compiler()->directive('svg', function ($arguments) {
-    //   list($path, $class) = array_pad(explode(',', trim($arguments, "() ")), 2, '');
-    //   $path = trim($path, "' ");
-    //   $class = trim($class, "' ");
-    //
-    //   $svg = new \DOMDocument();
-    //   $svg->load(asset_path($path));
-    //   $svg->documentElement->setAttribute("class", $class);
-    //   $output = $svg->saveXML($svg->documentElement);
-    //
-    //   return $output;
-    // });
 });

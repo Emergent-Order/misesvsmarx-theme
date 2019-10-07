@@ -10,7 +10,7 @@ module.exports = {
         'sans-serif'
       ],
       captain: [
-        'AmericanCaptain',
+        '"AmericanCaptain"',
         'Impact',
         'sans-serif'
       ],
