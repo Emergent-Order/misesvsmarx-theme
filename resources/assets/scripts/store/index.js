@@ -11,7 +11,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     posts: [],
-    playing: false
+    playing: false,
+    isCurrentlyOpen: false
   },
   getters: {
     getPost: (state) => (id) => {
@@ -22,6 +23,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    setIsCurrentlyOpen(state, { value }) {
+      state.isCurrentlyOpen = value
+    },
     setPostOffset(state, { id, offset }) {
       let post = state.posts.find(post => post.id == id)
       post.offset = offset
@@ -67,6 +71,7 @@ const store = new Vuex.Store({
     },
     async playAudio({ state, dispatch }) {
       await dispatch('closeAnnotations')
+      dispatch('setIsCurrentlyOpen', false)
       state.playing = true
       return true
     },
