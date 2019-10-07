@@ -58,11 +58,22 @@ class App extends Controller
       $output = [];
 
       foreach($posts as $post) {
+        // print_r($post);
+        // $content = json_encode(do_blocks(get_the_content($post->ID)));
+        $blocks = parse_blocks($post->post_content);
+        $content = '';
+        foreach( $blocks as $block) {
+          $content .= $block["innerHTML"];
+        }
+
+        print_r('/*' . $content . '*/');
+
         $output[] = array(
           'id' => $post->ID,
+          'slug' => $post->post_name,
           'title' => $post->post_title,
-          'excerpt' => $post->excerpt,
-          'content' => $post->content,
+          'excerpt' => $post->post_excerpt,
+          'content' => $content,
           'video_url' => get_field('video_url', $post->ID),
           'type' => get_field('type', $post->ID)
         );

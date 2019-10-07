@@ -32,8 +32,9 @@ mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
   })
   .purgeCss({
     enabled: production,
-    extensions: ['php', 'vue'],
-    whitelistPatterns: [/plyr/, /icon/, /annotation/]
+    extensions: ['php', 'blade', 'vue'],
+    whitelistPatterns: [/plyr/, /icon/, /annotation/],
+    whitelistPatternsChildren: [/lyrics/]
   })
 
 mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)

@@ -35,5 +35,6 @@
 @section('data')
   <script id="data">
     window.__data = {!! App::annotations() !!};
+    console.log(window.__data);
   </script>
 @endsection

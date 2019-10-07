@@ -1,4 +1,4 @@
-p {
+.template-lyrics p {
   @apply relative z-10;
   @include grid('lg') {
     @apply static;
@@ -43,12 +43,6 @@ p {
 
 .is-open .annotation-aside {
   pointer-events: auto;
-//   // display: block;
-//   opacity: 1;
-//   max-height: 800px;
-//   transition:
-//     opacity 0.25s ease-in-out 1s,
-//     max-height 1.25s ease-in-out 0s;
 }
 
 

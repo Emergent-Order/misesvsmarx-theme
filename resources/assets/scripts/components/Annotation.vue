@@ -20,7 +20,7 @@
         </vue-plyr>
       </div>
       <h3>{{ getRendered(post.title) }}</h3>
-      <div class="annotation-excerpt" v-html="getRendered(post.excerpt)"></div>
+      <div class="annotation-excerpt" v-html="content"></div>
     </aside>
   </div>
 </template>
@@ -225,6 +225,9 @@ export default {
     },
     videoUrl() {
       return `https://www.youtube.com/embed/${this.videoId}?iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`
+    },
+    content() {
+      return this.post.content ? this.post.content : ""
     }
   },
   methods: {
@@ -257,9 +260,8 @@ export default {
         nextPost.handleResize()
       }
     },
-    getRendered(obj) {
-      return obj ? S(obj.rendered).unescapeHTML().s : ''
-      // return obj ? he.decode(obj.rendered) : ''
+    getRendered(str) {
+      return str ? S(str).unescapeHTML().s : ''
     },
     async openAnnotation() {
       if (this.open) return false
