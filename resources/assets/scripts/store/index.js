@@ -3,10 +3,8 @@ import Vue from 'vue'
 import findIndex from 'lodash/findIndex'
 
 Vue.use(Vuex)
-//
-// const WPAPI = require('wpapi')
-// const site = WPAPI.discover(globals.siteUrl)
 
+const WPAPI = require('wpapi')
 
 const store = new Vuex.Store({
   state: {
@@ -76,8 +74,8 @@ const store = new Vuex.Store({
       return true
     },
     async getAnnotations({ state }) {
-      const posts = globals.annotations
-      console.log(posts)
+      const site = WPAPI.discover(globals.siteUrl)
+      const posts = await site.annotations().perPage(50).get()
 
       // Set posts
       state.posts = posts
