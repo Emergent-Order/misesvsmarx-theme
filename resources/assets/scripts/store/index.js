@@ -76,7 +76,8 @@ const store = new Vuex.Store({
       return true
     },
     async getAnnotations({ state }) {
-      const posts = window.__data
+      const posts = globals.annotations
+      console.log(posts)
 
       // Set posts
       state.posts = posts
@@ -100,7 +101,6 @@ const store = new Vuex.Store({
       })
 
       this.commit('setPosts', annotations)
-
       return annotations
     },
     async closeAnnotations({ state, getters}) {
