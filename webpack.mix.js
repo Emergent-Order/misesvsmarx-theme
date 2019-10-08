@@ -45,7 +45,7 @@ mix.copy(`${assets}/fonts`, `${dist}/fonts`, false)
 
 mix.browserSync({
   host: 'localhost',
-  proxy: 'http://misesvsmarx.loc',
+  proxy: 'https://misesvsmarx.loc',
   port: 3000,
 
   files: [

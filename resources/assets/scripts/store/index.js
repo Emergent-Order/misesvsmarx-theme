@@ -69,9 +69,9 @@ const store = new Vuex.Store({
     pauseAudio({ state }) {
       state.playing = false
     },
-    async playAudio({ state, dispatch }) {
+    async playAudio({ state, commit, dispatch }) {
       await dispatch('closeAnnotations')
-      dispatch('setIsCurrentlyOpen', false)
+      commit('setIsCurrentlyOpen', { value: false })
       state.playing = true
       return true
     },

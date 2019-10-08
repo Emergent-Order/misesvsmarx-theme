@@ -153,32 +153,33 @@ export default {
         }
 
         if(app.isMobile) {
-          const paragraph = app.$refs.box.closest('p')
-          const box = app.$refs.box
-
-          this.$anime({
-            targets: app.$refs.video,
-            paddingBottom: 0,
-            easing: 'easeInOutExpo',
-            duration: 500,
-          })
-
-          app.$anime({
-            targets: app.$refs.box,
-            opacity: 0,
-            duration: 500,
-            easing: 'easeInOutExpo'
-          })
-
-          app.$anime({
-            targets: paragraph,
-            height: app.originalHeight,
-            easing: 'easeInOutExpo',
-            duration: 250,
-            complete: function() {
-              paragraph.style.height = null
-            }
-          })
+          app.handleMobileClose()
+          // const paragraph = app.$refs.box.closest('p')
+          // const box = app.$refs.box
+          //
+          // this.$anime({
+          //   targets: app.$refs.video,
+          //   paddingBottom: 0,
+          //   easing: 'easeInOutExpo',
+          //   duration: 500,
+          // })
+          //
+          // app.$anime({
+          //   targets: app.$refs.box,
+          //   opacity: 0,
+          //   duration: 500,
+          //   easing: 'easeInOutExpo'
+          // })
+          //
+          // app.$anime({
+          //   targets: paragraph,
+          //   height: app.originalHeight,
+          //   easing: 'easeInOutExpo',
+          //   duration: 250,
+          //   complete: function() {
+          //     paragraph.style.height = null
+          //   }
+          // })
         } else {
           this.$anime({
             targets: app.$refs.video,
@@ -293,32 +294,67 @@ export default {
       const height = app.originalHeight + box.offsetHeight + this.targetHeight
       const y = app.originalHeight + 16
       const delay = this.$store.state.isCurrentlyOpen ? 750 : 0
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const scrollYy = paragraph.getBoundingClientRect().top + scrollTop - 30
 
       const timeline = this.$anime.timeline({
         easing: 'easeInOutQuad',
         delay: delay,
+        translateZ: 0,
+        duration: 350
+      })
+
+      setTimeout(() => { app.scrollToParagraph() }, delay)
+
+      timeline
+        .add({
+          targets: app.$refs.box,
+          translateY: y,
+        })
+        .add({
+          targets: paragraph,
+          height: height,
+        }, 0)
+        .add({
+          targets: app.$refs.video,
+          paddingBottom: '56.25%',
+        }, 0)
+        .add({
+          targets: app.$refs.box,
+          opacity: 1,
+        }, 350)
+    },
+    handleMobileClose() {
+      const app = this
+      const paragraph = app.$refs.box.closest('p')
+      const box = app.$refs.box
+
+      const timeline = this.$anime.timeline({
+        easing: 'easeInOutQuad',
+        translateZ: 0,
         duration: 350
       })
 
       timeline
         .add({
-          targets: paragraph,
-          height: height,
-          begin: function() {
-            app.$refs.box.style.transform = `translateY(${y}px)`;
-          }
+          targets: app.$refs.box,
+          opacity: 0,
         })
         .add({
-          targets: app.$refs.video,
-          paddingBottom: '56.25%'
-        }, 0)
-        .add({
           targets: app.$refs.box,
-          opacity: 1
-        }, '-150')
-    },
-    handleMobileClose() {
-
+          translateY: 0,
+        }, 350)
+        .add({
+          targets: paragraph,
+          height: app.originalHeight,
+          complete: function() {
+            paragraph.style.height = null
+          }
+        }, 350)
+        .add({
+          targets: app.$refs.video,
+          paddingBottom: '0%'
+        }, 350)
     },
     setOffset(y) {
       if (this.windowWidth < 1024) return null
@@ -356,6 +392,7 @@ export default {
       const scroll = window.document.scrollingElement || window.document.body || window.document.documentElement
       const paragraph = this.$refs.box.closest('p')
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const fromTop = paragraph.getBoundingClientRect().top
       const y = paragraph.getBoundingClientRect().top + scrollTop - 30
 
       this.$anime({
@@ -369,10 +406,10 @@ export default {
       if (this.open) return false
       const app = this
       this.setOffset(0)
-      this.$store.dispatch('setIsCurrentlyOpen', { value: true })
       this.$store.dispatch('pauseAudio')
       this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
         app.handleResize()
+        this.$store.commit('setIsCurrentlyOpen', { value: true })
         // app.scrollToParagraph()
         if (app.player) {
           app.player.restart()
