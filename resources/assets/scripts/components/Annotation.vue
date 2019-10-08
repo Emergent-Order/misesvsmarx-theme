@@ -87,114 +87,21 @@ export default {
     },
     'post.open': function(val) {
       const app = this
-      if (val) {
-        if (app.isMobile) {
+      const animation = `${ app.isMobile ? 'mobile' : 'desktop' }${ val ? '-open' : '-close' }`
+
+      switch (animation) {
+        case 'mobile-open':
           app.handleMobileOpen()
-          // const paragraph = app.$refs.box.closest('p')
-          // const box = app.$refs.box
-          // const height = app.originalHeight + box.offsetHeight + this.targetHeight
-          // const y = app.originalHeight + 16
-          //
-          // this.$nextTick(() => {
-          //   this.$anime({
-          //     targets: app.$refs.video,
-          //     paddingBottom: '56.25%',
-          //     easing: 'easeInOutExpo',
-          //     duration: 500,
-          //     delay: 750
-          //   })
-          //
-          //   app.$anime({
-          //     targets: app.$refs.box,
-          //     translateY: y,
-          //     duration: 250,
-          //     delay: 500,
-          //     easing: 'easeInOutExpo'
-          //   })
-          //
-          //   app.$anime({
-          //     targets: app.$refs.box,
-          //     opacity: 1,
-          //     duration: 500,
-          //     delay: 750,
-          //     easing: 'easeInOutExpo'
-          //   })
-          //
-          //   app.$anime({
-          //     targets: paragraph,
-          //     height: height,
-          //     easing: 'easeInOutExpo',
-          //     delay: 750,
-          //     duration: 500
-          //   })
-          // })
-        } else {
-          this.$anime({
-            targets: app.$refs.video,
-            paddingBottom: '56.25%',
-            easing: 'easeInOutExpo',
-            duration: 500
-          })
-
-          if(app.maybeMoveNextPost) {
-            /* -------------------------------------------------------------
-            // Use nextTick here to ensure that when there's a race condition
-            // between resetting the offset to 0 and moving the next post,
-            // moving the next post is the last instruction
-            // ------------------------------------------------------------- */
-            this.$nextTick(() => {
-              app.nextPost.setOffset(app.targetHeight)
-            })
-          }
-        }
-      } else {
-        if(app.maybeMoveNextPost) {
-          app.nextPost.setOffset(0)
-        }
-
-        if(app.isMobile) {
+          break;
+        case 'mobile-close':
           app.handleMobileClose()
-          // const paragraph = app.$refs.box.closest('p')
-          // const box = app.$refs.box
-          //
-          // this.$anime({
-          //   targets: app.$refs.video,
-          //   paddingBottom: 0,
-          //   easing: 'easeInOutExpo',
-          //   duration: 500,
-          // })
-          //
-          // app.$anime({
-          //   targets: app.$refs.box,
-          //   opacity: 0,
-          //   duration: 500,
-          //   easing: 'easeInOutExpo'
-          // })
-          //
-          // app.$anime({
-          //   targets: paragraph,
-          //   height: app.originalHeight,
-          //   easing: 'easeInOutExpo',
-          //   duration: 250,
-          //   complete: function() {
-          //     paragraph.style.height = null
-          //   }
-          // })
-        } else {
-          this.$anime({
-            targets: app.$refs.video,
-            paddingBottom: 0,
-            easing: 'easeInOutExpo',
-            duration: 500,
-          })
-
-          app.$anime({
-            targets: app.$refs.box,
-            translateY: 0,
-            duration: 500,
-            easing: 'easeInOutExpo'
-          })
-        }
+          break;
+        case 'desktop-open':
+          app.handleDesktopOpen()
+          break;
+        case 'desktop-close':
+          app.handleDesktopClose()
+          break;
       }
     }
   },
@@ -287,6 +194,49 @@ export default {
     }
   },
   methods: {
+    handleDesktopOpen() {
+      const app = this
+
+      this.$anime({
+        targets: app.$refs.video,
+        paddingBottom: '56.25%',
+        easing: 'easeInOutExpo',
+        duration: 500
+      })
+
+      app.scrollToParagraph()
+
+      if(app.maybeMoveNextPost) {
+        /* -------------------------------------------------------------
+        // Use nextTick here to ensure that when there's a race condition
+        // between resetting the offset to 0 and moving the next post,
+        // moving the next post is the last instruction
+        // ------------------------------------------------------------- */
+        this.$nextTick(() => {
+          app.nextPost.setOffset(app.targetHeight)
+        })
+      }
+    },
+    handleDesktopClose() {
+      const app = this
+      app.$anime({
+        targets: app.$refs.video,
+        paddingBottom: 0,
+        easing: 'easeInOutExpo',
+        duration: 500,
+      })
+
+      app.$anime({
+        targets: app.$refs.box,
+        translateY: 0,
+        duration: 500,
+        easing: 'easeInOutExpo'
+      })
+
+      if(app.maybeMoveNextPost) {
+        app.nextPost.setOffset(0)
+      }
+    },
     handleMobileOpen() {
       const app = this
       const paragraph = app.$refs.box.closest('p')
@@ -410,7 +360,6 @@ export default {
       this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
         app.handleResize()
         this.$store.commit('setIsCurrentlyOpen', { value: true })
-        // app.scrollToParagraph()
         if (app.player) {
           app.player.restart()
           app.player.play()
