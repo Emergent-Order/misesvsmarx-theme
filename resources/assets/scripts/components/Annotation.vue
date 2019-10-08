@@ -28,6 +28,7 @@
 <script>
 const getVideoId = require('get-video-id')
 const S = require('string')
+const qs = require('querystringify')
 
 export default {
   name: "Annotation",
@@ -43,14 +44,21 @@ export default {
       offsetY: 0,
       originalHeight: 0,
       playerOpts: {
-        autoplay: true,
-        muted: false,
         youtube: {
           noCookie: false,
           rel: 0,
           showinfo: 0,
           iv_load_policy: 3,
-          modestbranding: 1
+          modestbranding: 1,
+          enablejsapi: 1
+        },
+        vimeo: {
+          byline: false,
+          controls: false,
+          loop: false,
+          playsinline: true,
+          portrait: false,
+          transparent: true
         },
         settings: []
       }
@@ -81,86 +89,110 @@ export default {
       const app = this
       if (val) {
         if (app.isMobile) {
-          const paragraph = app.$refs.box.closest('p')
-          const box = app.$refs.box
-          const height = app.originalHeight + box.offsetHeight + this.targetHeight
-          const y = app.originalHeight + 16
-
-          this.$nextTick(() => {
-            app.$anime({
-              targets: app.$refs.box,
-              opacity: 1,
-              translateY: y,
-              duration: 500,
-              easing: 'easeInOutExpo'
-            })
-
-            app.$anime({
-              targets: paragraph,
-              height: height,
-              easing: 'easeInOutExpo',
-              duration: 500
-            })
+          app.handleMobileOpen()
+          // const paragraph = app.$refs.box.closest('p')
+          // const box = app.$refs.box
+          // const height = app.originalHeight + box.offsetHeight + this.targetHeight
+          // const y = app.originalHeight + 16
+          //
+          // this.$nextTick(() => {
+          //   this.$anime({
+          //     targets: app.$refs.video,
+          //     paddingBottom: '56.25%',
+          //     easing: 'easeInOutExpo',
+          //     duration: 500,
+          //     delay: 750
+          //   })
+          //
+          //   app.$anime({
+          //     targets: app.$refs.box,
+          //     translateY: y,
+          //     duration: 250,
+          //     delay: 500,
+          //     easing: 'easeInOutExpo'
+          //   })
+          //
+          //   app.$anime({
+          //     targets: app.$refs.box,
+          //     opacity: 1,
+          //     duration: 500,
+          //     delay: 750,
+          //     easing: 'easeInOutExpo'
+          //   })
+          //
+          //   app.$anime({
+          //     targets: paragraph,
+          //     height: height,
+          //     easing: 'easeInOutExpo',
+          //     delay: 750,
+          //     duration: 500
+          //   })
+          // })
+        } else {
+          this.$anime({
+            targets: app.$refs.video,
+            paddingBottom: '56.25%',
+            easing: 'easeInOutExpo',
+            duration: 500
           })
-        }
 
-        this.$anime({
-          targets: app.$refs.video,
-          paddingBottom: '56.25%',
-          easing: 'easeInOutExpo',
-          duration: 500
-        })
-
-        if(app.maybeMoveNextPost) {
-          /* -------------------------------------------------------------
-          // Use nextTick here to ensure that when there's a race condition
-          // between resetting the offset to 0 and moving the next post,
-          // moving the next post is the last instruction
-          // ------------------------------------------------------------- */
-          this.$nextTick(() => {
-            app.nextPost.setOffset(app.targetHeight)
-          })
+          if(app.maybeMoveNextPost) {
+            /* -------------------------------------------------------------
+            // Use nextTick here to ensure that when there's a race condition
+            // between resetting the offset to 0 and moving the next post,
+            // moving the next post is the last instruction
+            // ------------------------------------------------------------- */
+            this.$nextTick(() => {
+              app.nextPost.setOffset(app.targetHeight)
+            })
+          }
         }
       } else {
-        this.$anime({
-          targets: app.$refs.video,
-          paddingBottom: 0,
-          easing: 'easeInOutExpo',
-          duration: 500,
-        })
-
-        app.$anime({
-          targets: app.$refs.box,
-          // opacity: 0,
-          translateY: 0,
-          duration: 500,
-          easing: 'easeInOutExpo'
-        })
-
         if(app.maybeMoveNextPost) {
           app.nextPost.setOffset(0)
         }
 
         if(app.isMobile) {
-          const paragraph = app.$refs.box.closest('p')
-          const box = app.$refs.box
-
-          app.$anime({
-            targets: app.$refs.box,
-            opacity: 0,
-            // translateY: 0,
+          app.handleMobileClose()
+          // const paragraph = app.$refs.box.closest('p')
+          // const box = app.$refs.box
+          //
+          // this.$anime({
+          //   targets: app.$refs.video,
+          //   paddingBottom: 0,
+          //   easing: 'easeInOutExpo',
+          //   duration: 500,
+          // })
+          //
+          // app.$anime({
+          //   targets: app.$refs.box,
+          //   opacity: 0,
+          //   duration: 500,
+          //   easing: 'easeInOutExpo'
+          // })
+          //
+          // app.$anime({
+          //   targets: paragraph,
+          //   height: app.originalHeight,
+          //   easing: 'easeInOutExpo',
+          //   duration: 250,
+          //   complete: function() {
+          //     paragraph.style.height = null
+          //   }
+          // })
+        } else {
+          this.$anime({
+            targets: app.$refs.video,
+            paddingBottom: 0,
+            easing: 'easeInOutExpo',
             duration: 500,
-            easing: 'easeInOutExpo'
           })
 
           app.$anime({
-            targets: paragraph,
-            height: app.originalHeight,
-            easing: 'easeInOutExpo',
+            targets: app.$refs.box,
+            translateY: 0,
             duration: 500,
-            complete: function() {
-              paragraph.style.height = null
-            }
+            easing: 'easeInOutExpo'
           })
         }
       }
@@ -208,6 +240,9 @@ export default {
     videoEmbed() {
       return this.post.videoEmbed
     },
+    video() {
+      return this.hasVideo ? getVideoId(this.videoEmbed) : null
+    },
     videoId() {
       var regex = /<iframe.*?s*src="(.*?)".*?<\/iframe>/
       var src = regex.exec(this.videoEmbed)
@@ -224,13 +259,103 @@ export default {
       return this.hasVideo ? this.$refs.plyr.player : null
     },
     videoUrl() {
-      return `https://www.youtube.com/embed/${this.videoId}?iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`
+      // Return false if anything went wrong with the video ID
+      if (!this.hasVideo || !this.videoId) return false
+      const id = this.videoId
+      let q
+
+      // Turn off autoplay for mobile devices
+      let autoplay = !this.isMobile
+
+      switch (this.video.service) {
+        case 'vimeo':
+          q = qs.stringify({
+            autoplay: autoplay
+          }, true)
+          return `https://player.vimeo.com/video/${id}${q}`
+        case 'youtube':
+          q = qs.stringify({
+            autoplay: autoplay ? 1 : 0
+          }, true)
+          return `https://www.youtube.com/embed/${id}${q}`
+        default:
+          return ''
+      }
     },
     content() {
       return this.post.content ? this.post.content : ""
     }
   },
   methods: {
+    handleMobileOpen() {
+      const app = this
+      const paragraph = app.$refs.box.closest('p')
+      const box = app.$refs.box
+      const height = app.originalHeight + box.offsetHeight + this.targetHeight
+      const y = app.originalHeight + 16
+      const delay = this.$store.state.isCurrentlyOpen ? 750 : 0
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const scrollYy = paragraph.getBoundingClientRect().top + scrollTop - 30
+
+      const timeline = this.$anime.timeline({
+        easing: 'easeInOutQuad',
+        delay: delay,
+        translateZ: 0,
+        duration: 350
+      })
+
+      setTimeout(() => { app.scrollToParagraph() }, delay)
+
+      timeline
+        .add({
+          targets: app.$refs.box,
+          translateY: y,
+        })
+        .add({
+          targets: paragraph,
+          height: height,
+        }, 0)
+        .add({
+          targets: app.$refs.video,
+          paddingBottom: '56.25%',
+        }, 0)
+        .add({
+          targets: app.$refs.box,
+          opacity: 1,
+        }, 350)
+    },
+    handleMobileClose() {
+      const app = this
+      const paragraph = app.$refs.box.closest('p')
+      const box = app.$refs.box
+
+      const timeline = this.$anime.timeline({
+        easing: 'easeInOutQuad',
+        translateZ: 0,
+        duration: 350
+      })
+
+      timeline
+        .add({
+          targets: app.$refs.box,
+          opacity: 0,
+        })
+        .add({
+          targets: app.$refs.box,
+          translateY: 0,
+        }, 350)
+        .add({
+          targets: paragraph,
+          height: app.originalHeight,
+          complete: function() {
+            paragraph.style.height = null
+          }
+        }, 350)
+        .add({
+          targets: app.$refs.video,
+          paddingBottom: '0%'
+        }, 350)
+    },
     setOffset(y) {
       if (this.windowWidth < 1024) return null
       this.$store.commit('setPostOffset', {
@@ -263,6 +388,20 @@ export default {
     getRendered(str) {
       return str ? S(str).unescapeHTML().s : ''
     },
+    scrollToParagraph() {
+      const scroll = window.document.scrollingElement || window.document.body || window.document.documentElement
+      const paragraph = this.$refs.box.closest('p')
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const fromTop = paragraph.getBoundingClientRect().top
+      const y = paragraph.getBoundingClientRect().top + scrollTop - 30
+
+      this.$anime({
+        targets: scroll,
+        scrollTop: y,
+        duration: 500,
+        easing: 'easeInOutExpo'
+      })
+    },
     async openAnnotation() {
       if (this.open) return false
       const app = this
@@ -270,6 +409,8 @@ export default {
       this.$store.dispatch('pauseAudio')
       this.$store.dispatch('openAnnotation', app.post.id).then(async () => {
         app.handleResize()
+        this.$store.commit('setIsCurrentlyOpen', { value: true })
+        // app.scrollToParagraph()
         if (app.player) {
           app.player.restart()
           app.player.play()
