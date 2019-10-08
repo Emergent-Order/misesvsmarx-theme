@@ -11,6 +11,10 @@
     @apply text-gold-bright font-normal;
   }
 
+  a {
+    @apply text-gold-light;
+  }
+
   .container {
     @apply px-4 flex-col py-8;
 
@@ -76,4 +80,46 @@
     top: 33px;
     width: 78px;
   }
+}
+
+
+.template-lyrics #footer {
+  @apply border-t-2 border-gray-400;
+  @apply mb-64 mt-32 pt-12 pb-64;
+  @include grid('lg') {
+    @apply mb-64 mt-32 pt-24;
+  }
+}
+
+
+.template-lyrics #footer .container {
+  @apply flex-col px-4;
+
+  img {
+    width: 90%;
+    max-width: 400px;
+    @apply mb-4;
+  }
+
+  @include grid('lg') {
+    @apply flex-row;
+  }
+}
+
+.template-lyrics #footer .col {
+  @include grid('lg') {
+    @apply px-4;
+  }
+}
+
+.template-lyrics #footer #left-col {
+  @apply mb-16;
+  img { @apply mb-4; }
+  @include grid('lg') {
+    @apply mb-20;
+    img { @apply mb-8; }
+  }
+}
+.template-lyrics #footer #right-col {
+
 }
