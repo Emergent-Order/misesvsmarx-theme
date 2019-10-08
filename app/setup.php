@@ -23,7 +23,8 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
     wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
-      'siteUrl' => site_url()
+      'siteUrl' => site_url(),
+      'annotations' => \App::annotations()
     ));
 }, 100);
 
