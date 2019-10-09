@@ -74,7 +74,7 @@ const store = new Vuex.Store({
       return true
     },
     async getAnnotations({ state }) {
-      const site = WPAPI.discover(globals.siteUrl)
+      const site = await WPAPI.discover(globals.siteUrl)
       const posts = await site.annotations().perPage(50).get()
 
       // Set posts
