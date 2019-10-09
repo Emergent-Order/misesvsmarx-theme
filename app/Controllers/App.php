@@ -75,6 +75,6 @@ class App extends Controller
         );
       }
 
-      return json_encode($output);
+      return $output;
     }
 }

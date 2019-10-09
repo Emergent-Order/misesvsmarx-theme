@@ -20,7 +20,7 @@
         </vue-plyr>
       </div>
       <h3>{{ getRendered(post.title) }}</h3>
-      <div class="annotation-excerpt" v-html="content"></div>
+      <div class="annotation-excerpt" v-html="getRendered(post.content)"></div>
     </aside>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
   },
   watch: {
     'post.top': function(val) {
-      this.y = val
+      this.y = val - 10
     },
     'post.offset': function(newVal, oldVal) {
       if (newVal === oldVal) return null
@@ -335,8 +335,8 @@ export default {
         nextPost.handleResize()
       }
     },
-    getRendered(str) {
-      return str ? S(str).unescapeHTML().s : ''
+    getRendered(obj) {
+      return obj ? S(obj.rendered).unescapeHTML().s : ''
     },
     scrollToParagraph() {
       const scroll = window.document.scrollingElement || window.document.body || window.document.documentElement

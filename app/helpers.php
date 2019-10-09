@@ -76,9 +76,9 @@ function template_path($file, $data = [])
 // }
 
 function asset_path($asset) {
-    $dist = sage('assets')->dist;
-    $path = sage('assets')->get($asset);
-    return $dist . $path;
+    $dist = rtrim(sage('assets')->dist, '/');
+    $path = ltrim(sage('assets')->get($asset), '/');
+    return "{$dist}/{$path}";
 }
 
 /**

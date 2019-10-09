@@ -3,10 +3,8 @@ import Vue from 'vue'
 import findIndex from 'lodash/findIndex'
 
 Vue.use(Vuex)
-//
-// const WPAPI = require('wpapi')
-// const site = WPAPI.discover(globals.siteUrl)
 
+const WPAPI = require('wpapi')
 
 const store = new Vuex.Store({
   state: {
@@ -76,16 +74,22 @@ const store = new Vuex.Store({
       return true
     },
     async getAnnotations({ state }) {
-      const posts = window.__data
+      const site = new WPAPI({ endpoint: `${globals.siteUrl}/wp-json`})
+      const namespace = 'wp/v2'
+      const route = '/annotations'
+      site.annotations = site.registerRoute(namespace, route)
+
+      // const site = await WPAPI.discover(globals.siteUrl)
+      const posts = await site.annotations().perPage(50).get()
 
       // Set posts
       state.posts = posts
 
       // Set annotations
       const annotations = await posts.map((post, index) => {
-        const hasVideo = post ? post.type === "Video" : null
-        const videoEmbed = hasVideo ? post.video_url : null
-        // const externalUrl = !hasVideo ? post.acf.other_url : null
+        const hasVideo = post ? post.acf.type === "Video" : null
+        const videoEmbed = hasVideo ? post.acf.video_url : null
+        const externalUrl = !hasVideo ? post.acf.other_url : null
 
         return {
           open: false,
@@ -100,7 +104,6 @@ const store = new Vuex.Store({
       })
 
       this.commit('setPosts', annotations)
-
       return annotations
     },
     async closeAnnotations({ state, getters}) {

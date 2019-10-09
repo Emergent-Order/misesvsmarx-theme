@@ -29,11 +29,15 @@
       @include('partials.content-page')
     @endwhile
   </Lyrics>
+  <div id="footer">
+    <div class="flex container mx-auto justify-start items-start">
+      <div id="left-col" class="col w-full lg:w-1/2">
+        @php the_field('left') @endphp
+      </div>
+      <div id="right-col" class="col w-full lg:w-1/2">
+        @php the_field('right') @endphp
+      </div>
+    </div>
+  </div>
   <MediaPlayer url="{!! App::audio() !!}" />
-@endsection
-
-@section('data')
-  <script id="data">
-    window.__data = {!! App::annotations() !!};
-  </script>
 @endsection
