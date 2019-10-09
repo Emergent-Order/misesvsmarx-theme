@@ -82,9 +82,9 @@ const store = new Vuex.Store({
 
       // Set annotations
       const annotations = await posts.map((post, index) => {
-        const hasVideo = post ? post.type === "Video" : null
-        const videoEmbed = hasVideo ? post.video_url : null
-        // const externalUrl = !hasVideo ? post.acf.other_url : null
+        const hasVideo = post ? post.acf.type === "Video" : null
+        const videoEmbed = hasVideo ? post.acf.video_url : null
+        const externalUrl = !hasVideo ? post.acf.other_url : null
 
         return {
           open: false,
