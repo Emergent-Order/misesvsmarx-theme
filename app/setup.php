@@ -16,16 +16,15 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('google/fonts', "https://fonts.googleapis.com/css?family=Work+Sans&display=swap", true, null);
 
     // Remove unused Wordpress stuff
-    wp_dequeue_style( 'wpsl-styles' );
-    wp_dequeue_style( 'wp-block-style' );
-    wp_dequeue_style( 'wp-block-library' );
+    // wp_dequeue_style( 'wpsl-styles' );
+    // wp_dequeue_style( 'wp-block-style' );
+    // wp_dequeue_style( 'wp-block-library' );
 
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
     // wp_enqueue_script('cdn/wpapi', 'https://cdn.jsdelivr.net/npm/wpapi@1.2.1/wpapi.min.js', [], null, true);
     wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url(),
-      // 'annotations' => \App::annotations()
     ));
 }, 100);
 

@@ -74,7 +74,12 @@ const store = new Vuex.Store({
       return true
     },
     async getAnnotations({ state }) {
-      const site = await WPAPI.discover(globals.siteUrl)
+      const site = new WPAPI({ endpoint: `${globals.siteUrl}/wp-json`})
+      const namespace = 'wp/v2'
+      const route = '/annotations'
+      site.annotations = site.registerRoute(namespace, route)
+
+      // const site = await WPAPI.discover(globals.siteUrl)
       const posts = await site.annotations().perPage(50).get()
 
       // Set posts

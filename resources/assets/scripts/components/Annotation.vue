@@ -66,7 +66,7 @@ export default {
   },
   watch: {
     'post.top': function(val) {
-      this.y = val
+      this.y = val - 10
     },
     'post.offset': function(newVal, oldVal) {
       if (newVal === oldVal) return null
