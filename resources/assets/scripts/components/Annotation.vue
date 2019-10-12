@@ -245,7 +245,7 @@ export default {
       const y = app.originalHeight + 16
       const delay = this.$store.state.isCurrentlyOpen ? 750 : 0
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-      const scrollYy = paragraph.getBoundingClientRect().top + scrollTop - 30
+      const scrollY = paragraph.getBoundingClientRect().top + scrollTop - 30
 
       const timeline = this.$anime.timeline({
         easing: 'easeInOutQuad',
