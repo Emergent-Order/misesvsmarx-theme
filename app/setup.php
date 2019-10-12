@@ -22,11 +22,8 @@ add_action('wp_enqueue_scripts', function () {
 
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
     // wp_enqueue_script('cdn/wpapi', 'https://cdn.jsdelivr.net/npm/wpapi@1.2.1/wpapi.min.js', [], null, true);
-    wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
+    // wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
-      'siteUrl' => site_url(),
-    ));
-    wp_localize_script('misesvsmarx/captain', 'globals', array(
       'siteUrl' => site_url(),
     ));
 }, 100);
