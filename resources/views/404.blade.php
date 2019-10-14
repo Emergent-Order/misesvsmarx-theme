@@ -16,6 +16,9 @@
       <div class="alert alert-warning">
         {{ __('Sorry, but the page you were trying to view does not exist.', 'sage') }}
       </div>
+      <button id="do-it-again" class="btn btn-dark default">
+        {{ __('My marginal utility for bad econ jokes is still > 0', 'sage') }}
+      </button>
       <a href="/">← Go Back to the App</a>
     </div>
   @endif
