@@ -37,7 +37,7 @@ if (production) {
       enabled: production,
       extensions: ['php', 'blade', 'vue'],
       whitelistPatterns: [/plyr/, /icon/, /annotation/],
-      whitelistPatternsChildren: [/lyrics/, /error404/]
+      whitelistPatternsChildren: [/lyrics/, /error404/, /home/]
     })
 } else {
   mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
@@ -50,6 +50,7 @@ if (production) {
 }
 
 mix.js(`${assets}/scripts/main.js`, `${dist}/scripts/main.js`)
+   .js(`${assets}/scripts/404.js`, `${dist}/scripts/404.js`)
 
 mix.browserSync({
   host: 'localhost',
