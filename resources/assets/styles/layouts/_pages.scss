@@ -28,9 +28,13 @@
 }
 
 .home #intro {
-  font-size: 18px;
+  font-size: 28px;
   @include grid('lg') {
     @apply mx-0;
+  }
+
+  mark {
+    @apply bg-gold-bright;
   }
 }
 
@@ -44,7 +48,7 @@
   }
 
   @include grid('lg') {
-    @apply w-1/2 my-8 mr-auto ml-0;
+    @apply w-1/2 mb-8 mt-16 mr-auto ml-0;
     p { font-size: 20px; }
   }
 }
