@@ -1,0 +1,25 @@
+.annotation-template-default {
+  @apply pb-32;
+  .banner {
+    margin-bottom: 4rem;
+  }
+
+  header {
+    .breadcrumb {
+      margin-bottom: 2rem;
+    }
+
+    .entry-title {
+      @apply font-captain text-red-bright uppercase;
+      @apply mt-4 mb-4;
+      font-size: 90px;
+      line-height: 0.9;
+    }
+  }
+}
+
+.type-annotation {
+  .responsive-embed + p {
+    @apply mt-4;
+  }
+}

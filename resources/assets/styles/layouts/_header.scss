@@ -10,3 +10,23 @@
     @apply flex-row items-end;
   }
 }
+
+.page-header {
+  text-align: center;
+  @apply mt-32;
+}
+
+.page-header h1 {
+  @apply font-eternal uppercase text-red-dark;
+  font-size: 120px;
+}
+
+p,
+.alert {
+  @apply font-body mb-4;
+}
+
+
+a {
+  @apply font-body font-bold underline;
+}

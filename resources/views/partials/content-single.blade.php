@@ -1,13 +1,18 @@
 <article @php post_class() @endphp>
-  <header>
-    <h1 class="entry-title">{!! get_the_title() !!}</h1>
-    @include('partials/entry-meta')
+  <header class="container mx-auto">
+    <div class="w-full lg:w-3/5 mx-auto">
+      <label class="breadcrumb">
+        <a href="/">← Back to App</a>
+      </label>
+      <h1 class="entry-title">{!! get_the_title() !!}</h1>
+    </div>
   </header>
-  <div id="app" class="entry-content">
-    @php the_content() @endphp
+  <div id="app" class="entry-content container mx-auto">
+    <div class="w-full lg:w-3/5 mx-auto">
+      <div class="responsive-embed">
+        @php the_field('video_url') @endphp
+      </div>
+      @php the_content() @endphp
+    </div>
   </div>
-  <footer>
-    {!! wp_link_pages(['echo' => 0, 'before' => '<nav class="page-nav"><p>' . __('Pages:', 'sage'), 'after' => '</p></nav>']) !!}
-  </footer>
-  @php comments_template('/partials/comments.blade.php') @endphp
 </article>

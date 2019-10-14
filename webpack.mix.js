@@ -2,6 +2,7 @@ const mix = require('laravel-mix')
 const tailwindcss = require('tailwindcss')
 require('laravel-mix-purgecss')
 require('laravel-mix-bundle-analyzer')
+require('laravel-mix-tailwind')
 
 /*
  |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ if (production) {
     .options({
       processCssUrls: false,
       postCss: [
-        tailwindcss(`${assets}/styles/tailwind.config.js`),
+        tailwindcss(`./tailwind.config.js`),
       ]
     })
     .purgeCss({
@@ -43,7 +44,7 @@ if (production) {
     .options({
       processCssUrls: false,
       postCss: [
-        tailwindcss(`${assets}/styles/tailwind.config.js`),
+        tailwindcss(`./tailwind.config.js`),
       ]
     })
 }

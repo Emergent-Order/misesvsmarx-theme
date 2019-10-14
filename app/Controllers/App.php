@@ -28,7 +28,7 @@ class App extends Controller
             return sprintf(__('Search Results for %s', 'sage'), get_search_query());
         }
         if (is_404()) {
-            return __('Not Found', 'sage');
+            return __('Uh oh', 'sage');
         }
         return get_the_title();
     }

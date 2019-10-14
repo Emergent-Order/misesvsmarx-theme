@@ -15,14 +15,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('typekit/fonts', "https://use.typekit.net/rnm6tqn.css", true, null);
     wp_enqueue_style('google/fonts', "https://fonts.googleapis.com/css?family=Work+Sans&display=swap", true, null);
 
-    // Remove unused Wordpress stuff
-    // wp_dequeue_style( 'wpsl-styles' );
-    // wp_dequeue_style( 'wp-block-style' );
-    // wp_dequeue_style( 'wp-block-library' );
-
     wp_enqueue_script('misesvsmarx/main', asset_path('/scripts/main.js'), [], null, true);
-    // wp_enqueue_script('cdn/wpapi', 'https://cdn.jsdelivr.net/npm/wpapi@1.2.1/wpapi.min.js', [], null, true);
-    // wp_enqueue_script('misesvsmarx/captain', asset_path('/fonts/fonts-american-captain.js'), [], null, true);
     wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url(),
     ));
@@ -138,4 +131,17 @@ add_action('after_setup_theme', function () {
     sage('blade')->compiler()->directive('asset', function ($asset) {
         return "<?= " . __NAMESPACE__ . "\\asset_path({$asset}); ?>";
     });
+
+    /**
+     * Create options page for theme
+     */
+    if( function_exists('acf_add_options_page') ) {
+    	acf_add_options_page(array(
+    		'page_title' 	=> 'Theme General Settings',
+    		'menu_title'	=> 'Theme Settings',
+    		'menu_slug' 	=> 'theme-general-settings',
+    		'capability'	=> 'edit_posts',
+    		'redirect'		=> false
+    	));
+    }
 });
