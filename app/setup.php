@@ -19,6 +19,11 @@ add_action('wp_enqueue_scripts', function () {
     wp_localize_script('misesvsmarx/main', 'globals', array(
       'siteUrl' => site_url(),
     ));
+
+    if (is_404()) {
+      wp_enqueue_script('jquery');
+      wp_enqueue_script('misesvsmarx/404', asset_path('/scripts/404.js'), ['jquery'], null, true);
+    }
 }, 100);
 
 /**

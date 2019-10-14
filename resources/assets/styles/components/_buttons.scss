@@ -1,5 +1,10 @@
 .btn {
-  // @apply bg-primary rounded my-3 px-4 py-3 text-white leading-none;
-
+  @apply bg-black rounded my-3 px-4 py-3 text-white font-bold font-body;
+  display: block;
   transition: 0.2s ease;
+  opacity: 0.7;
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
 }
