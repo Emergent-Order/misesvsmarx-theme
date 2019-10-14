@@ -37,7 +37,7 @@ if (production) {
       enabled: production,
       extensions: ['php', 'blade', 'vue'],
       whitelistPatterns: [/plyr/, /icon/, /annotation/],
-      whitelistPatternsChildren: [/lyrics/]
+      whitelistPatternsChildren: [/lyrics/, /error404/]
     })
 } else {
   mix.sass(`${assets}/styles/main.scss`, `${dist}/styles`)
